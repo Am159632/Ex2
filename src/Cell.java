@@ -60,7 +60,7 @@ public class Cell {
         boolean ans=true;
         if (this.content.startsWith("=")){
             for (int i=0;i<this.content.length();i++){
-                if (!Character.isDigit(this.content.charAt(i))&&)
+                if (!Character.isDigit(this.content.charAt(i)))
             }
         }
         else { ans=false;}
