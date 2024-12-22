@@ -1,4 +1,3 @@
-
 public class Cell {
     private String content;
     private Double value;
@@ -12,7 +11,7 @@ public class Cell {
             this.value = Double.parseDouble(content);
         } else if (isForm(content)) {
             this.type = "Formula";
-            this.value = null; // נוסחה תחושב בהמשך
+            this.value = computeForm(content); // נוסחה תחושב בהמשך
         } else {
             this.type = "Text";
             this.value = null; // טקסט לא מחושב
@@ -45,25 +44,54 @@ public class Cell {
         this.type = type;
     }
 
-    public boolean isNumber(){
+    private boolean isNumber(String text){
         boolean ans=true;
-        for (int i=0;i<this.content.length();i++){
-            if (!Character.isDigit(this.content.charAt(i)))
+        for (int i=0;i<text.length();i++){
+            if (!Character.isDigit(text.charAt(i)))
                 return false;
         }
         return ans;
     }
-    public boolean isText(){
-
+    private boolean isText(String text){
+        if (isText(text) && !isForm(text))
+            return true;
+        return false;
     }
-    public boolean isForm(){
+    private boolean isForm(String text){
         boolean ans=true;
         if (this.content.startsWith("=")){
-            for (int i=0;i<this.content.length();i++){
-                if (!Character.isDigit(this.content.charAt(i)))
+            for (int i=0;i<text.length();i++){
+                char x=text.charAt(i);
+                if ( !Character.isDigit(x) || x!='.' || x!='+' || x!='-' || x!='*' || x!='/' || x!='(' || x!=')' )
+                    return false;
             }
         }
         else { ans=false;}
+        return ans;
+    }
+
+    private Double computeForm(String form){
+        double ans=0.0;
+        int count =0;
+        for (int i=1;i<form.length();i++){
+            char x=form.charAt(i);
+            if ( !Character.isDigit(x)&& x!='.' ) {
+                count = i;
+                break;
+            }
+        }
+        String before= form.substring(1, count);
+        double b=Double.parseDouble(before);
+        String after = form.substring(count +2,this.content.length());
+        double a=Double.parseDouble(after);
+        if (this.content.charAt(count +1)=='*')
+            ans=b*computeForm(after);
+        else if (this.content.charAt(count +1)=='+')
+            ans=b+computeForm(after);
+        else if (this.content.charAt(count +1)=='/')
+            ans=b/computeForm(after);
+        else if (this.content.charAt(count +1)=='-')
+            ans=b-computeForm(after);
         return ans;
     }
 }
