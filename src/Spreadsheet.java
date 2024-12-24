@@ -27,7 +27,10 @@ public class Spreadsheet {
 
         private int xCell(String c){
             char letter=c.charAt(0);
+            char isnumber =c.charAt(1);
             if ( letter<'A' || letter>'Z' )
+                return -1;
+            if (!Character.isDigit(isnumber))
                 return -1;
             return letter-'A';
         }

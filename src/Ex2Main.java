@@ -3,7 +3,7 @@
 public class Ex2Main {
     public static void main(String[] args) {
         Cell c=new Cell("wqffe");
-        c.setContent("=123*2");
+        c.setContent("=123*4");
         System.out.println(c.getType());
         System.out.println(c.getValue());
     }

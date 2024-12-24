@@ -49,7 +49,7 @@ public class Cell {
         }
     }
 
-    private boolean isNumber(String text){
+    private static boolean isNumber(String text){
         boolean ans=true;
         for (int i=0;i<text.length();i++){
             if (!Character.isDigit(text.charAt(i)) && text.charAt(i)!='.' )
@@ -57,13 +57,13 @@ public class Cell {
         }
         return ans;
     }
-    private boolean isText(String text){
-        if (isText(text) && !isForm(text))
+    private static boolean isText(String text){
+        if (isNumber(text) && !isForm(text))
             return true;
         return false;
     }
-    private boolean isForm(String text){
-        if (text.startsWith(=))
+    private static boolean isForm(String text){
+        if (text.startsWith("="))
             return true;
         return false;
     }
@@ -91,6 +91,9 @@ public class Cell {
                 }
             }
         }
+    }
+    private double parentheses(String form){
+
     }
 
     private Double computeForm(String form) {
