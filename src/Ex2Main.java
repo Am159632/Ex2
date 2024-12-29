@@ -2,7 +2,7 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Ex2Main {
     public static void main(String[] args) {
-        Cell c=new Cell("wqffe");
+        SCell c=new SCell("wqffe");
         c.setContent("=123*4");
         System.out.println(c.getType());
         System.out.println(c.getValue());

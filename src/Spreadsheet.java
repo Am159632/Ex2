@@ -1,5 +1,5 @@
 public class Spreadsheet {
-        private Cell[][] cells;
+        private SCell[][] SCells;
         private int width;
         private int height;
 
@@ -7,22 +7,22 @@ public class Spreadsheet {
         public Spreadsheet(int width, int height) {
             this.width = width;
             this.height = height;
-            cells = new Cell[width][height];
+            SCells = new SCell[width][height];
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
-                    cells[i][j] = new Cell(""); // תאים ריקים בהתחלה
+                    SCells[i][j] = new SCell(""); // תאים ריקים בהתחלה
                 }
             }
         }
 
         //Getter
-        public Cell getCell(int x,int y){
-            return this.cells[x][y];
+        public SCell getCell(int x, int y){
+            return this.SCells[x][y];
         }
 
         //Setter
-        public void setCell(int x,int y,Cell c) {
-            this.cells[x][y]=c;
+        public void setCell(int x, int y, SCell c) {
+            this.SCells[x][y]=c;
         }
 
         private int xCell(String c){
