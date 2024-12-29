@@ -1,110 +1,145 @@
-public class SCell implements Cell{
-    private String content;
-    private Double value;
-    private String type;
+public class SCell implements Cell {
 
-    // Constructors
-    public SCell(){
+    private String line;
+    private int type;
+    // Add your code here
+
+    public SCell(String s) {
+
+        setData(s);
     }
 
-    public SCell(String content) {
-        this.content = content;
-        if (isNumber(content)) {
-            this.type = "Number";
-            this.value = Double.parseDouble(content);
-        } else if (isForm(content)) {
-            this.type = "Formula";
-            this.value = computeForm(content); // נוסחה תחושב בהמשך
-        } else {
-            this.type = "Text";
-            this.value = null; // טקסט לא מחושב
+    @Override
+    public int getOrder() {
+
+        return 0;
+    }
+
+    //@Override
+    @Override
+    public String toString() {
+        return getData();
+    }
+
+    @Override
+    public void setData(String s) {
+        // Add your code here
+        line = s;
+        /////////////////////
+    }
+
+    @Override
+    public String getData() {
+        return line;
+    }
+
+    @Override
+    public int getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(int t) {
+        type = t;
+    }
+
+    @Override
+    public void setOrder(int t) {
+        // Add your code here
+
+    }
+
+    private static boolean isNumber(String text) {
+        try {
+            Double.parseDouble(text);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    // Getters
-    public String getContent() {
-        return this.content;
+    private static boolean isText(String text) {
+        if (!isNumber(text) && !text.startsWith("="))
+            return true;
+        return false;
     }
+    //בודק אם התא נכון
 
-    public Double getValue() {
-        return this.value;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    // Setters
-    public void setContent(String content) {
-        this.content = content;
-        if (isNumber(content)) {
-            this.type = "Number";
-            this.value = Double.parseDouble(content);
-        } else if (isForm(content)) {
-            this.type = "Formula";
-            this.value = computeForm(content); // נוסחה תחושב בהמשך
-        } else {
-            this.type = "Text";
-            this.value = null; // טקסט לא מחושב
-        }
-    }
-
-    private static boolean isNumber(String text){
-        boolean ans=true;
-        for (int i=0;i<text.length();i++){
-            if (!Character.isDigit(text.charAt(i)) && text.charAt(i)!='.' )
+    public static boolean isCell(String cell){
+        String x=cell.substring(1,cell.length()-1);
+        if (cell.charAt(0)>='A' & cell.charAt(0)<='Z'){
+            try {
+                int a= Integer.parseInt(x);
+                if (a>=0 & a<=99)
+                    return true;
+            } catch (Exception e) {
                 return false;
+            }
         }
-        return ans;
-    }
-    private static boolean isText(String text){
-        if (isNumber(text) && !isForm(text))
-            return true;
-        return false;
-    }
-    private static boolean isForm(String text){
-        if (text.startsWith("="))
-            return true;
         return false;
     }
 
-    private void calS(String form){
-        form=form.substring(1);
-        int countA=0,countB=0;
-        String ans="";
-        for (int i=0;i<form.length();i++){
-            if (form.indexOf(i)=='*' || form.indexOf(i)=='/' ){
-                for (int j=i-1;j>=0;j--){
-                    if (!Character.isDigit(form.indexOf(j))){
-                        countA=j;
+    public static boolean RecourseIsForm(String text){
+        for (int i=0;i<text.length();i++){
+
+        }
+        return true;
+    }
+    public static boolean isForm(String text) {
+        if (!text.startsWith("="))
+            return false;
+        text=text.substring(1,text.length()-1);
+        int count=0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i)=='(')
+                count++;
+            if (text.charAt(i)==')'){
+                if (count>0)
+                    count--;
+                else
+                    return false;
+            }
+        }
+        if (count>0)
+            return false;
+    }
+
+    private void calS(String form) {
+        form = form.substring(1);
+        int countA = 0, countB = 0;
+        String ans = "";
+        for (int i = 0; i < form.length(); i++) {
+            if (form.indexOf(i) == '*' || form.indexOf(i) == '/') {
+                for (int j = i - 1; j >= 0; j--) {
+                    if (!Character.isDigit(form.indexOf(j))) {
+                        countA = j;
                         break;
                     }
                 }
-                for (int j=i+1;j<form.length();j++){
-                    if (!Character.isDigit(form.indexOf(j))){
-                        countB=j;
+                for (int j = i + 1; j < form.length(); j++) {
+                    if (!Character.isDigit(form.indexOf(j))) {
+                        countB = j;
                         break;
                     }
                 }
-                if (form.indexOf(i)=='*'){
-                    form=form.substring(0,i-countA)+form.substring(i+countB+1,form.length());
+                if (form.indexOf(i) == '*') {
+                    form = form.substring(0, i - countA) + form.substring(i + countB + 1, form.length());
                 }
             }
         }
     }
-    private double parentheses(String form){
 
-    }
 
     private Double computeForm(String form) {
-        String parentheses="";
-        form=form.substring(1);
-        for (int i=0;i<form.length();i++){
-            if (form.indexOf(i)=='(') {
-                    for (int j=i;j<form.length();j++){
-                        if (form.indexOf(i)==')'){
-                            parentheses=form.substring(i+1,j-1);
+        String parentheses = "";
+        form = form.substring(1);
+        for (int i = 0; i < form.length(); i++) {
+            if (form.indexOf(i) == '(') {
+                for (int j = i; j < form.length(); j++) {
+                    if (form.indexOf(i) == ')') {
+                        parentheses = form.substring(i + 1, j - 1);
                     }
+                }
             }
         }
 
@@ -130,9 +165,11 @@ public class SCell implements Cell{
             else if (form.charAt(count + 1) == '-')
                 ans = b - computeForm(after);
             return ans;*/
-        }
+
 
         return 1.0;
         //לעשות תנאי עצירה+ סדר פעולות
     }
 }
+
+
