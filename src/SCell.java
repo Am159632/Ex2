@@ -2,10 +2,9 @@ public class SCell implements Cell {
 
     private String line;
     private int type;
-    // Add your code here
+    private int order;
 
     public SCell(String s) {
-
         setData(s);
     }
 
@@ -23,9 +22,7 @@ public class SCell implements Cell {
 
     @Override
     public void setData(String s) {
-        // Add your code here
         line = s;
-        /////////////////////
     }
 
     @Override
@@ -65,30 +62,45 @@ public class SCell implements Cell {
     }
     //בודק אם התא נכון
 
-    public static boolean isCell(String cell){
-        String x=cell.substring(1,cell.length()-1);
-        if (cell.charAt(0)>='A' & cell.charAt(0)<='Z'){
-            try {
-                int a= Integer.parseInt(x);
-                if (a>=0 & a<=99)
-                    return true;
-            } catch (Exception e) {
-                return false;
+    public static int valueOP(char c){
+        if (c=='+' | c=='-')
+            return 1;
+        if (c=='*' | c=='/')
+            return 2;
+        return 3;
+    }
+    public static int lowIOP(String text){
+        int count=0,index=-1,lowOP=3;
+        for (int i=0;i<text.length();i++){
+            char x=text.charAt(i);
+            if (x== '(')
+                count++;
+            if (x== ')')
+                count--;
+            if (count==0){
+                if (valueOP(x)<lowOP){
+                    lowOP=valueOP(x);
+                    index=i;
+                }
             }
         }
-        return false;
+        return index;
     }
-
-    public static boolean RecourseIsForm(String text){
-        for (int i=0;i<text.length();i++){
-
-        }
-        return true;
+    public static double cal(char op,double l,double r){
+        if (op=='*')
+            return l*r;
+        if (op=='+')
+            return l+r;
+        if(op=='-')
+            return l-r;
+        if (r==0)
+            throw new RuntimeException("infinity");
+        return l/r;
     }
-    public static boolean isForm(String text) {
+    public boolean isValid(String text){
         if (!text.startsWith("="))
             return false;
-        text=text.substring(1,text.length()-1);
+        text=text.substring(1,text.length());
         int count=0;
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i)=='(')
@@ -102,73 +114,51 @@ public class SCell implements Cell {
         }
         if (count>0)
             return false;
+        for (int i = 0; i < text.length(); i++){
+            char x=text.charAt(i);
+            if (x!='*' && x!='/' && x!='+' && x!='-' && x!='(' && x!=')' && x!='.' && !Character.isDigit(x))
+                return false;
+        }
+        return true;
     }
+    public  boolean isForm(String text) {
 
-    private void calS(String form) {
-        form = form.substring(1);
-        int countA = 0, countB = 0;
-        String ans = "";
-        for (int i = 0; i < form.length(); i++) {
-            if (form.indexOf(i) == '*' || form.indexOf(i) == '/') {
-                for (int j = i - 1; j >= 0; j--) {
-                    if (!Character.isDigit(form.indexOf(j))) {
-                        countA = j;
-                        break;
-                    }
-                }
-                for (int j = i + 1; j < form.length(); j++) {
-                    if (!Character.isDigit(form.indexOf(j))) {
-                        countB = j;
-                        break;
-                    }
-                }
-                if (form.indexOf(i) == '*') {
-                    form = form.substring(0, i - countA) + form.substring(i + countB + 1, form.length());
-                }
-            }
+        try {
+           double d=computeForm(text);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
+    public Double computeForm(String form) {
 
+        form=form.replaceAll("\\s+", "");
 
-    private Double computeForm(String form) {
-        String parentheses = "";
-        form = form.substring(1);
-        for (int i = 0; i < form.length(); i++) {
-            if (form.indexOf(i) == '(') {
-                for (int j = i; j < form.length(); j++) {
-                    if (form.indexOf(i) == ')') {
-                        parentheses = form.substring(i + 1, j - 1);
-                    }
-                }
-            }
+        if (!isValid(form))
+            throw new RuntimeException("not valid");
+
+        if (form.startsWith("="))
+            form=form.substring(1,form.length());
+
+        if (isNumber(form))
+            return Double.parseDouble(form);
+
+        if (lowIOP(form)==0)
+            throw new RuntimeException("not valid");
+
+        String left=form.substring(0,lowIOP(form));
+        String right=form.substring(lowIOP(form)+1,form.length());
+         if (left.startsWith("(") & left.endsWith(")")){
+            left=form.substring(1,left.length()-1);
         }
+        if (right.startsWith("(") & right.endsWith(")")){
+            right=right.substring(1,right.length()-1);
+        }
+        double Vl=computeForm("="+left);
+        double Vr=computeForm("="+right);
 
-        /*double ans = 0.0;
-        while (!isNumber(form)) {
-            int count = 0;
-            for (int i = 1; i < form.length(); i++) {
-                char x = form.charAt(i);
-                if (!Character.isDigit(x) && x != '.') {
-                    count = i;
-                    break;
-                }
-            }
-            String before = form.substring(1, count);
-            double b = Double.parseDouble(before);
-            String after = form.substring(count + 2, form.length());
-            if (form.charAt(count + 1) == '*')
-                ans = b * computeForm(after);
-            else if (form.charAt(count + 1) == '+')
-                ans = b + computeForm(after);
-            else if (form.charAt(count + 1) == '/')
-                ans = b / computeForm(after);
-            else if (form.charAt(count + 1) == '-')
-                ans = b - computeForm(after);
-            return ans;*/
-
-
-        return 1.0;
-        //לעשות תנאי עצירה+ סדר פעולות
+        char x=form.charAt(lowIOP(form));
+        return cal(x,Vl,Vr);
     }
 }
 
