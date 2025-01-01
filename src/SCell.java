@@ -2,7 +2,6 @@ public class SCell implements Cell {
 
     private String line;
     private int type;
-    private int order;
 
     public SCell(String s) {
         setData(s);
@@ -10,11 +9,9 @@ public class SCell implements Cell {
 
     @Override
     public int getOrder() {
-
         return 0;
     }
 
-    //@Override
     @Override
     public String toString() {
         return getData();
@@ -42,11 +39,12 @@ public class SCell implements Cell {
 
     @Override
     public void setOrder(int t) {
-        // Add your code here
 
     }
 
-    private static boolean isNumber(String text) {
+    public static boolean isNumber(String text) {
+        text = text.replaceAll("\\s+", "");
+
         try {
             Double.parseDouble(text);
             return true;
@@ -60,106 +58,118 @@ public class SCell implements Cell {
             return true;
         return false;
     }
-    //בודק אם התא נכון
 
-    public static int valueOP(char c){
-        if (c=='+' | c=='-')
+    public static int valueOP(char c) {
+        if (c == '+' | c == '-')
             return 1;
-        if (c=='*' | c=='/')
+        if (c == '*' | c == '/')
             return 2;
         return 3;
     }
-    public static int lowIOP(String text){
-        int count=0,index=-1,lowOP=3;
-        for (int i=0;i<text.length();i++){
-            char x=text.charAt(i);
-            if (x== '(')
+
+    public static int indOfMainOp(String text) {
+        int count = 0, index = 0, lowOP = 3;
+        for (int i = 0; i < text.length(); i++) {
+            char x = text.charAt(i);
+            if (x == '(')
                 count++;
-            if (x== ')')
+            if (x == ')')
                 count--;
-            if (count==0){
-                if (valueOP(x)<lowOP){
-                    lowOP=valueOP(x);
-                    index=i;
+            if (count == 0) {
+                if (valueOP(x) < lowOP) {
+                    lowOP = valueOP(x);
+                    index = i;
                 }
             }
         }
         return index;
     }
-    public static double cal(char op,double l,double r){
-        if (op=='*')
-            return l*r;
-        if (op=='+')
-            return l+r;
-        if(op=='-')
-            return l-r;
-        if (r==0)
+
+    public static double cal(char op, double l, double r) {
+        if (op == '*')
+            return l * r;
+        if (op == '+')
+            return l + r;
+        if (op == '-')
+            return l - r;
+        if (r == 0)
             throw new RuntimeException("infinity");
-        return l/r;
+        return l / r;
     }
-    public boolean isValid(String text){
+
+    public static boolean isValidForm(String text) {
         if (!text.startsWith("="))
             return false;
-        text=text.substring(1,text.length());
-        int count=0;
+        text = text.substring(1, text.length());
+        int count = 0;
         for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i)=='(')
+            if (text.charAt(i) == '(')
                 count++;
-            if (text.charAt(i)==')'){
-                if (count>0)
+            if (text.charAt(i) == ')') {
+                if (count > 0)
                     count--;
                 else
                     return false;
             }
         }
-        if (count>0)
+        if (count > 0)
             return false;
-        for (int i = 0; i < text.length(); i++){
-            char x=text.charAt(i);
-            if (x!='*' && x!='/' && x!='+' && x!='-' && x!='(' && x!=')' && x!='.' && !Character.isDigit(x))
+        for (int i = 0; i < text.length(); i++) {
+            char x = text.charAt(i);
+            if (x != '*' && x != '/' && x != '+' && x != '-' && x != '(' && x != ')' && x != '.' && !Character.isDigit(x))
                 return false;
         }
         return true;
     }
-    public  boolean isForm(String text) {
 
+    public static boolean isForm(String text) {
         try {
-           double d=computeForm(text);
+            double d = computeForm(text);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
-    public Double computeForm(String form) {
 
-        form=form.replaceAll("\\s+", "");
+    public static Double computeForm(String form) {
 
-        if (!isValid(form))
+        form = form.replaceAll("\\s+", "");
+
+
+        if (form.startsWith("=-(")) {
+            String x = form.substring(2, form.length());
+            return computeForm("=0-1*" + x);
+        }
+        if (form.startsWith("=+(")) {
+            String x = form.substring(2, form.length());
+            return computeForm("=" + x);
+        }
+
+        if (!isValidForm(form))
             throw new RuntimeException("not valid");
 
         if (form.startsWith("="))
-            form=form.substring(1,form.length());
+            form = form.substring(1, form.length());
 
         if (isNumber(form))
             return Double.parseDouble(form);
 
-        if (lowIOP(form)==0)
-            throw new RuntimeException("not valid");
-
-        String left=form.substring(0,lowIOP(form));
-        String right=form.substring(lowIOP(form)+1,form.length());
-         if (left.startsWith("(") & left.endsWith(")")){
-            left=form.substring(1,left.length()-1);
+        if (form.startsWith("(") & form.endsWith(")")) {
+            String x = "=" + form.substring(1, form.length() - 1);
+            if (isForm(x))
+                return computeForm(x);
         }
-        if (right.startsWith("(") & right.endsWith(")")){
-            right=right.substring(1,right.length()-1);
-        }
-        double Vl=computeForm("="+left);
-        double Vr=computeForm("="+right);
 
-        char x=form.charAt(lowIOP(form));
-        return cal(x,Vl,Vr);
+        String left = form.substring(0, indOfMainOp(form));
+        String right = form.substring(indOfMainOp(form) + 1, form.length());
+
+        double Vl = computeForm("=" + left);
+        double Vr = computeForm("=" + right);
+
+        char x = form.charAt(indOfMainOp(form));
+        return cal(x, Vl, Vr);
     }
 }
+
 
 
