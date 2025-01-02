@@ -19,7 +19,15 @@ public class SCell implements Cell {
 
     @Override
     public void setData(String s) {
-        line = s;
+        this.line = s;
+        if (SCell.isText(s))
+            this.type=Ex2Utils.TEXT;
+        if (SCell.isNumber(s))
+            this.type=Ex2Utils.NUMBER;
+        if(SCell.isForm(s))
+            this.type= Ex2Utils.FORM;
+        if (!SCell.isForm(s) && s.startsWith("="))
+            this.type= Ex2Utils.ERR_FORM_FORMAT;
     }
 
     @Override
@@ -34,12 +42,18 @@ public class SCell implements Cell {
 
     @Override
     public void setType(int t) {
-        type = t;
+        type=t;
     }
 
     @Override
     public void setOrder(int t) {
 
+    }
+
+    private static boolean isText(String text) {
+        if (!isNumber(text) && !text.startsWith("="))
+            return true;
+        return false;
     }
 
     public static boolean isNumber(String text) {
@@ -53,12 +67,6 @@ public class SCell implements Cell {
         }
     }
 
-    private static boolean isText(String text) {
-        if (!isNumber(text) && !text.startsWith("="))
-            return true;
-        return false;
-    }
-
     public static int valueOP(char c) {
         if (c == '+' | c == '-')
             return 1;
@@ -68,7 +76,7 @@ public class SCell implements Cell {
     }
 
     public static int indOfMainOp(String text) {
-        int count = 0, index = 0, lowOP = 3;
+        int count = 0, index = -1, lowOP = 3;
         for (int i = 0; i < text.length(); i++) {
             char x = text.charAt(i);
             if (x == '(')
@@ -76,7 +84,7 @@ public class SCell implements Cell {
             if (x == ')')
                 count--;
             if (count == 0) {
-                if (valueOP(x) < lowOP) {
+                if (valueOP(x) <= lowOP) {
                     lowOP = valueOP(x);
                     index = i;
                 }
@@ -92,8 +100,6 @@ public class SCell implements Cell {
             return l + r;
         if (op == '-')
             return l - r;
-        if (r == 0)
-            throw new RuntimeException("infinity");
         return l / r;
     }
 
@@ -116,8 +122,10 @@ public class SCell implements Cell {
             return false;
         for (int i = 0; i < text.length(); i++) {
             char x = text.charAt(i);
-            if (x != '*' && x != '/' && x != '+' && x != '-' && x != '(' && x != ')' && x != '.' && !Character.isDigit(x))
-                return false;
+            if (x != '*' && x != '/' && x != '+' && x != '-' && x != '(' && x != ')' && x != '.' && !Character.isDigit(x)) {
+                if (x<'d' && x>'f')
+                    return false;
+            }
         }
         return true;
     }
@@ -156,7 +164,7 @@ public class SCell implements Cell {
 
         if (form.startsWith("(") & form.endsWith(")")) {
             String x = "=" + form.substring(1, form.length() - 1);
-            if (isForm(x))
+            if(isForm(x))
                 return computeForm(x);
         }
 

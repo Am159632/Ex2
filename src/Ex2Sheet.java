@@ -26,8 +26,17 @@ public class Ex2Sheet implements Sheet {
 
         Cell c = get(x,y);
         if(c!=null) {ans = c.toString();}
-
-        /////////////////////
+        if(c.getType()==Ex2Utils.ERR_FORM_FORMAT)
+            return Ex2Utils.ERR_FORM;
+        if (c.getType()==Ex2Utils.ERR_CYCLE_FORM)
+            return Ex2Utils.ERR_CYCLE;
+        if (c.getType()==Ex2Utils.TEXT)
+            return ans;
+        if (c.getType()==Ex2Utils.NUMBER)
+            return ans;
+        if (c.getType()==Ex2Utils.FORM){
+            ans=""+SCell.computeForm(c.getData());
+        }
         return ans;
     }
 
@@ -64,9 +73,10 @@ public class Ex2Sheet implements Sheet {
     @Override
     public void eval() {
         int[][] dd = depth();
-        // Add your code here
-
-        // ///////////////////
+        for (int i=0;i< dd.length;i++){
+            for (int j=0;j<dd[0].length;j++){
+            }
+        }
     }
 
     @Override
@@ -105,7 +115,6 @@ public class Ex2Sheet implements Sheet {
     public String eval(int x, int y) {
         String ans = null;
         if(get(x,y)!=null) {ans = get(x,y).toString();}
-
 
         /////////////////////
         return ans;
@@ -159,16 +168,5 @@ public class Ex2Sheet implements Sheet {
             }
             return Integer.parseInt(n);
         }
-    public static boolean isCell(String cell){
-        String x=cell.substring(1,cell.length()-1);
-        if (cell.charAt(0)>='A' & cell.charAt(0)<='Z'){
-            try {
-                int a= Integer.parseInt(x);
-                if (a>=0 & a<=99)
-                    return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
+
     }*/
