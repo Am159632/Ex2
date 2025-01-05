@@ -143,7 +143,6 @@ public class SCell implements Cell {
 
         form = form.replaceAll("\\s+", "");
 
-
         if (form.startsWith("=-(")) {
             String x = form.substring(2, form.length());
             return computeForm("=0-1*" + x);
