@@ -1,4 +1,8 @@
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 // Add your documentation below:
 
 public class Ex2Sheet implements Sheet {
@@ -56,9 +60,7 @@ public class Ex2Sheet implements Sheet {
     @Override
     public Cell get(String cords) {
         Cell ans = null;
-        // Add your code here
-
-        /////////////////////
+       //CellEntry
         return ans;
     }
 
@@ -76,9 +78,6 @@ public class Ex2Sheet implements Sheet {
     public void set(int x, int y, String s) {
         Cell c = new SCell(s);
         table[x][y] = c;
-        // Add your code here
-
-        /////////////////////
     }
 
     @Override
@@ -92,7 +91,7 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public boolean isIn(int xx, int yy) {
-        boolean ans = xx >= 0 && yy >= 0;
+        boolean ans = xx >= 0 && yy >= 0 && table.length>xx && table[0].length>yy ;
         // Add your code here
 
         /////////////////////
@@ -103,10 +102,75 @@ public class Ex2Sheet implements Sheet {
     public int[][] depth() {
         int[][] ans = new int[width()][height()];
         // Add your code here
-
+        for (int i=0;i< ans.length;i++){
+            for (int j=0;j<ans[0].length;j++){
+                int order = table[i][j].getOrder();
+                if (order > 0) {
+                    order = calculateOrder(i,j);
+                }
+                ans[i][j] = order;
+            }
+        }
         // ///////////////////
         return ans;
     }
+
+    private int calculateOrder(int i, int j) {
+        Cell cell = table[i][j];
+        String xy = String.valueOf((char)(i + 'a') + j).toUpperCase();
+
+        List<String> visited = new ArrayList<>();
+        visited.add(xy);
+
+        return calculateOrder(visited, extractCells(cell));
+    }
+
+    private int calculateOrder(List<String> visited, List<String> cells) {
+        if (cells.isEmpty()) {
+            return 0;
+        }
+
+        int order = 1;
+
+        int max = 0;
+
+        boolean isCyclic = false;
+
+        for (int index = 0; index < cells.size() && !isCyclic; index ++) {
+            String cellStr = cells.get(index);
+            // get the X & Y of the cell and if not cyclic -> dig deeper
+            int x = cellStr.toLowerCase().charAt(0) - 'a';
+            int y = Integer.parseInt(cellStr.substring(1));
+            Cell cell = table[x][y];
+            if (visited.contains(cellStr)) {
+                isCyclic = true;
+                visited.clear();
+            }
+            if (!isCyclic) {
+                visited.add(cellStr);
+                order += calculateOrder(visited, extractCells(cell));
+            }
+        }
+
+        if (visited.isEmpty()) return -1;
+
+        max = Math.max(max, order);
+
+        return max;
+    }
+
+    private List<String> extractCells(Cell cell) {
+        List<String> cells = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("[a-zA-Z]+\\d+");
+        Matcher matcher = pattern.matcher(cell.getData());
+
+        while (matcher.find()) {
+            cells.add(matcher.group());
+        }
+
+        return cells;
+}
 
     @Override
     public void load(String fileName) throws IOException {
@@ -117,21 +181,20 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void save(String fileName) throws IOException {
-        // Add your code here
 
-        /////////////////////
     }
 
     @Override
     public String eval(int x, int y) {
-        String ans = null;
-        if (get(x, y) != null)
-            ans = value(x,y);
+        if (get(x, y) == null)
+            return Ex2Utils.EMPTY_CELL;
         if (get(x, y).getType() == Ex2Utils.ERR_FORM_FORMAT) {
-            ans = changeCellEval(ans);
-            ans = "" + SCell.computeForm(get(x, y).getData());
-        } else ans = value(x, y);
-        return ans;
+            set(x,y,changeCellEval(get(x,y).getData()));
+            if (get(x, y).getType() == Ex2Utils.ERR_FORM_FORMAT) {
+                return Ex2Utils.ERR_FORM;
+            }
+        }
+        return value(x, y);
     }
     private double getCellValue(String cell){
         CellEntry c=CellEntry.ConvertString(cell);
@@ -146,7 +209,7 @@ public class Ex2Sheet implements Sheet {
                 int type=get(cell.getX(),cell.getY()).getType();
                 if (type==Ex2Utils.FORM || type==Ex2Utils.NUMBER){
                   SCell.computeForm(get(cell.getX(),cell.getY()).getData());
-                    ans=ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+2);
+                    return ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+2);
                 }
             }
             cell=CellEntry.ConvertString(ans.substring(i,i+3));
@@ -154,7 +217,7 @@ public class Ex2Sheet implements Sheet {
                 int type=get(cell.getX(),cell.getY()).getType();
                 if (type==Ex2Utils.FORM || type==Ex2Utils.NUMBER){
                     SCell.computeForm(get(cell.getX(),cell.getY()).getData());
-                    ans=ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+3);
+                    return ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+3);
                 }
             }
         }

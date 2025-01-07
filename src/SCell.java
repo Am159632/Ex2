@@ -69,12 +69,23 @@ public class SCell implements Cell {
         }
     }
 
-    public static int valueOP(char c) {
+
+    private static int valueOP(char c) {
         if (c == '+' | c == '-')
             return 1;
         if (c == '*' | c == '/')
             return 2;
         return 3;
+    }
+
+    private static double cal(char op, double l, double r) {
+        if (op == '*')
+            return l * r;
+        if (op == '+')
+            return l + r;
+        if (op == '-')
+            return l - r;
+        return l / r;
     }
 
     public static int indOfMainOp(String text) {
@@ -95,15 +106,11 @@ public class SCell implements Cell {
         return index;
     }
 
-    public static double cal(char op, double l, double r) {
-        if (op == '*')
-            return l * r;
-        if (op == '+')
-            return l + r;
-        if (op == '-')
-            return l - r;
-        return l / r;
-    }
+    /**
+     * Checking the formula validity(if start with = ,if it has valid parentheses ,if  it has valid parentheses a wrong char)
+     * @param text
+     * @return true if valid
+     */
 
     public static boolean isValidForm(String text) {
         if (!text.startsWith("="))
@@ -133,6 +140,8 @@ public class SCell implements Cell {
     }
 
     public static boolean isForm(String text) {
+        if (!isValidForm(text))
+            return false;
         try {
             double d = computeForm(text);
             return true;
