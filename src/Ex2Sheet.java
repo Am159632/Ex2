@@ -29,10 +29,10 @@ public class Ex2Sheet implements Sheet {
         if (c != null) {
             ans = c.toString();
         }
-        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT){
-            c.setData(eval(x,y));
-            if (c.getType()== Ex2Utils.ERR_FORM_FORMAT)
-                ans= Ex2Utils.ERR_FORM;
+        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT) {
+            c.setData(eval(x, y));
+            if (c.getType() == Ex2Utils.ERR_FORM_FORMAT)
+                ans = Ex2Utils.ERR_FORM;
             else if (c.getType() == Ex2Utils.FORM)
                 ans = "" + SCell.computeForm(c.getData());
         }
@@ -126,52 +126,35 @@ public class Ex2Sheet implements Sheet {
     public String eval(int x, int y) {
         String ans = null;
         if (get(x, y) != null)
-            ans = get(x, y).toString();
+            ans = value(x,y);
         if (get(x, y).getType() == Ex2Utils.ERR_FORM_FORMAT) {
-            ans=changeCellEval(ans);
-            ans = "" + SCell.computeForm(get(x,y).getData());
-        } else ans= value(x, y);
+            ans = changeCellEval(ans);
+            ans = "" + SCell.computeForm(get(x, y).getData());
+        } else ans = value(x, y);
         return ans;
     }
-    private int xCell(String c){
-        char letter=c.charAt(0);
-        return letter-'A';
+    private double getCellValue(String cell){
+        CellEntry c=CellEntry.ConvertString(cell);
+        return SCell.computeForm(get(c.getX(),c.getY()).getData());
     }
 
-    private int yCell(String c){
-        String n=c.substring(1,c.length());
-        return Integer.parseInt(n);
-    }
-    public static boolean isCell(String cell) {
-        String x = cell.substring(1, cell.length() );
-        if (cell.charAt(0) >= 'A' & cell.charAt(0) <= 'Z') {
-            try {
-                int a = Integer.parseInt(x);
-                if (a >= 0 & a <= 99)
-                    return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
-    }
-    private String changeCellEval( String ans) {
+    private String changeCellEval(String ans) {
+       CellEntry cell;
         for (int i = 1; i < ans.length(); i++) {
-            if (ans.charAt(i) >= 'A' && ans.charAt(i) <= 'Z') {
-                String cell = ans.substring(i, i + 2);
-                if (isCell(cell)) {
-                    int x = xCell(cell);
-                    int y = yCell(cell);
-                    String value = value(x, y);
-                    ans = ans.replaceAll(cell, value);
-                } else {
-                    cell = ans.substring(i, i + 3);
-                    if (isCell(cell)) {
-                        int x = xCell(cell);
-                        int y = yCell(cell);
-                        String value = value(x, y);
-                        ans = ans.replaceAll(cell, value);
-                    }
+           cell=CellEntry.ConvertString(ans.substring(i,i+2));
+            if (cell.isValid()){
+                int type=get(cell.getX(),cell.getY()).getType();
+                if (type==Ex2Utils.FORM || type==Ex2Utils.NUMBER){
+                  SCell.computeForm(get(cell.getX(),cell.getY()).getData());
+                    ans=ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+2);
+                }
+            }
+            cell=CellEntry.ConvertString(ans.substring(i,i+3));
+            if (cell.isValid()){
+                int type=get(cell.getX(),cell.getY()).getType();
+                if (type==Ex2Utils.FORM || type==Ex2Utils.NUMBER){
+                    SCell.computeForm(get(cell.getX(),cell.getY()).getData());
+                    ans=ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+3);
                 }
             }
         }
@@ -207,7 +190,28 @@ public class Ex2Sheet implements Sheet {
         public void setCell(int x, int y, SCell c) {
             this.SCells[x][y]=c;
         }
+        private int xCell(String c){
+        char letter=c.charAt(0);
+        return letter-'A';
+    }
 
+    private int yCell(String c){
+        String n=c.substring(1,c.length());
+        return Integer.parseInt(n);
+    }
+    public static boolean isCell(String cell) {
+        String x = cell.substring(1, cell.length() );
+        if (cell.charAt(0) >= 'A' & cell.charAt(0) <= 'Z') {
+            try {
+                int a = Integer.parseInt(x);
+                if (a >= 0 & a <= 99)
+                    return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return false;
+    }
 
 
     }*/

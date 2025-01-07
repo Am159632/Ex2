@@ -1,18 +1,30 @@
 public class CellEntry  implements Index2D {
     private int x;
     private int y;
+    public CellEntry(int x,int y){
+        this.x=x;
+        this.y=y;
+    }
+
     @Override
     public boolean isValid() {
-        return false;
+        return this.x>=0 && this.x<=26 && this.y>=0 && this.y<=99;
     }
 
     @Override
     public int getX() {
-        return Ex2Utils.ERR;
+        return this.x;
     }
 
     @Override
     public int getY() {
-        return Ex2Utils.ERR;
+        return this.y;
+    }
+
+    public static CellEntry ConvertString(String cell) {
+        char letter = cell.charAt(0);
+        int x = letter - 'A';
+        int y = Integer.parseInt(cell.substring(1)) - 1;
+        return new CellEntry(x, y);
     }
 }

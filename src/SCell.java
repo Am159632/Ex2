@@ -2,6 +2,7 @@ public class SCell implements Cell {
 
     private String line;
     private int type;
+    private  int order;
 
     public SCell(String s) {
         setData(s);
@@ -9,7 +10,7 @@ public class SCell implements Cell {
 
     @Override
     public int getOrder() {
-        return 0;
+        return this.order;
     }
 
     @Override
@@ -20,6 +21,7 @@ public class SCell implements Cell {
     @Override
     public void setData(String s) {
         this.line = s;
+        this.order=0;
         if (SCell.isText(s))
             this.type=Ex2Utils.TEXT;
         if (SCell.isNumber(s))
@@ -47,7 +49,7 @@ public class SCell implements Cell {
 
     @Override
     public void setOrder(int t) {
-
+        this.order=t;
     }
 
     private static boolean isText(String text) {
