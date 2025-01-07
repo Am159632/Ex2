@@ -1,15 +1,16 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-// Add your documentation below:
 
 public class Ex2Sheet implements Sheet {
-    private Cell[][] table;
-    // Add your code here
+    private SCell[][] table;
 
-    // ///////////////////
     public Ex2Sheet(int x, int y) {
         table = new SCell[x][y];
         for (int i = 0; i < x; i = i + 1) {
@@ -27,40 +28,41 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String value(int x, int y) {
         String ans = Ex2Utils.EMPTY_CELL;
-        // Add your code here
 
         Cell c = get(x, y);
+        c.setOrder(depth()[x][y]);
         if (c != null) {
             ans = c.toString();
         }
-        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT) {
-            c.setData(eval(x, y));
-            if (c.getType() == Ex2Utils.ERR_FORM_FORMAT)
-                ans = Ex2Utils.ERR_FORM;
-            else if (c.getType() == Ex2Utils.FORM)
-                ans = "" + SCell.computeForm(c.getData());
-        }
-        if (c.getType() == Ex2Utils.ERR_CYCLE_FORM)
+        if (ans == Ex2Utils.EMPTY_CELL)
+            return Ex2Utils.EMPTY_CELL;
+        if (c.getOrder() == Ex2Utils.ERR_CYCLE_FORM)
             return Ex2Utils.ERR_CYCLE;
         if (c.getType() == Ex2Utils.TEXT)
             return ans;
         if (c.getType() == Ex2Utils.NUMBER)
             return ans;
-        if (c.getType() == Ex2Utils.FORM) {
+        if (c.getType() == Ex2Utils.FORM)
             ans = "" + SCell.computeForm(c.getData());
+        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT) {
+           if (eval(x,y)==Ex2Utils.ERR_FORM)
+               ans = Ex2Utils.ERR_FORM;
+           else
+               ans="" + SCell.computeForm(eval(x,y));
         }
         return ans;
     }
 
     @Override
-    public Cell get(int x, int y) {
+    public SCell get(int x, int y) {
         return table[x][y];
     }
 
     @Override
-    public Cell get(String cords) {
-        Cell ans = null;
-       //CellEntry
+    public SCell get(String cords) {
+        cords = cords.toUpperCase();
+        String ycell = cords.substring(1);
+        SCell ans = table[cords.charAt(0) - 'A'][Integer.parseInt(ycell)];
         return ans;
     }
 
@@ -76,7 +78,7 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void set(int x, int y, String s) {
-        Cell c = new SCell(s);
+        SCell c = new SCell(s);
         table[x][y] = c;
     }
 
@@ -91,33 +93,29 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public boolean isIn(int xx, int yy) {
-        boolean ans = xx >= 0 && yy >= 0 && table.length>xx && table[0].length>yy ;
-        // Add your code here
-
-        /////////////////////
-        return ans;
+        return xx >= 0 && yy >= 0 && table.length > xx && table[0].length > yy;
     }
 
     @Override
     public int[][] depth() {
-        int[][] ans = new int[width()][height()];
-        // Add your code here
-        for (int i=0;i< ans.length;i++){
-            for (int j=0;j<ans[0].length;j++){
+        int[][] ans = new int[this.width()][this.height()];
+        for (int i = 0; i < ans.length; i++) {
+            for (int j = 0; j < ans[0].length; j++) {
                 int order = table[i][j].getOrder();
-                if (order > 0) {
-                    order = calculateOrder(i,j);
+                if (table[i][j].getType() == Ex2Utils.ERR_FORM_FORMAT) {
+                    order = calculateOrder(i, j);
                 }
+                table[i][j].setOrder(order);
                 ans[i][j] = order;
             }
         }
-        // ///////////////////
+
         return ans;
     }
 
     private int calculateOrder(int i, int j) {
         Cell cell = table[i][j];
-        String xy = String.valueOf((char)(i + 'a') + j).toUpperCase();
+        String xy = String.valueOf((i + 'A') + j).toUpperCase();
 
         List<String> visited = new ArrayList<>();
         visited.add(xy);
@@ -136,7 +134,7 @@ public class Ex2Sheet implements Sheet {
 
         boolean isCyclic = false;
 
-        for (int index = 0; index < cells.size() && !isCyclic; index ++) {
+        for (int index = 0; index < cells.size() && !isCyclic; index++) {
             String cellStr = cells.get(index);
             // get the X & Y of the cell and if not cyclic -> dig deeper
             int x = cellStr.toLowerCase().charAt(0) - 'a';
@@ -170,30 +168,115 @@ public class Ex2Sheet implements Sheet {
         }
 
         return cells;
-}
+    }
 
     @Override
     public void load(String fileName) throws IOException {
-        // Add your code here
+        table = new SCell[Ex2Utils.WIDTH][Ex2Utils.HEIGHT];
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[i].length; j++) {
+                table[i][j] = new SCell("");
+            }
+        }
+        String line;
+        String delimiter = ",";
 
-        /////////////////////
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(delimiter);
+                // 3 is a normal line, 4 with remark
+                if (values.length == 3 || values.length == 4) {
+                    String x = values[0];
+                    String y = values[1];
+                    String data = values[2];
+
+                    if (isNumber(x) && isNumber(y)) {
+                        table[Integer.parseInt(x)][Integer.parseInt(y)] = new SCell(data);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private boolean isNumber(String text) {
+        try {
+            Integer.parseInt(text.trim());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public void save(String fileName) throws IOException {
 
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.append("Header");
+
+            for (int i = 0; i < table.length; i++) {
+                for (int j = 0; j < table[0].length; j++) {
+                    if (table[i][j] != null && !Objects.equals(table[i][j].getData(), "")) {
+                        writer.append(String.valueOf(i))
+                                .append(",")
+                                .append(String.valueOf(j))
+                                .append(",")
+                                .append(table[i][j].getData())
+                                .append("\n");
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
     public String eval(int x, int y) {
-        if (get(x, y) == null)
+        SCell cell = get(x, y);
+        if (cell == null)
             return Ex2Utils.EMPTY_CELL;
-        if (get(x, y).getType() == Ex2Utils.ERR_FORM_FORMAT) {
-            set(x,y,changeCellEval(get(x,y).getData()));
-            if (get(x, y).getType() == Ex2Utils.ERR_FORM_FORMAT) {
-                return Ex2Utils.ERR_FORM;
+        return changeCellEval(cell.getData());
+    }
+
+    private String changeCellEval(String ans) {
+        if (ans.isEmpty())
+            return null;
+        boolean ok=true;
+        for (int i=0;i<ans.length();i++){
+            if (Character.isLetter(ans.charAt(i)))
+                ok=false;
+        }
+        if (ok)
+            return ans;
+        int startI = 0, count = 0;
+        for (int i = 1; i < ans.length(); i++) {
+            if (ans.charAt(i) >= 'A' && ans.charAt(i) <= 'Z') {
+                count = 0;
+                startI = i;
+                for (int j = i + 1; j < ans.length(); j++) {
+                    if (Character.isDigit(ans.charAt(j))) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                }
+                if (count == 0) {
+                    return Ex2Utils.ERR_FORM;
+                } else {
+                    break;
+                }
             }
         }
+        SCell c = get(ans.substring(startI, startI + count + 1));
+        return ans.substring(0, startI) + changeCellEval(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
+    }
+}
+
+
+    /*@Override
+    public String eval(int x, int y) {
+            if (changeCellEval(get(x,y).getData()).getType() == Ex2Utils.ERR_FORM_FORMAT)
+                return Ex2Utils.ERR_FORM;
         return value(x, y);
     }
     private double getCellValue(String cell){
@@ -201,80 +284,30 @@ public class Ex2Sheet implements Sheet {
         return SCell.computeForm(get(c.getX(),c.getY()).getData());
     }
 
-    private String changeCellEval(String ans) {
-       CellEntry cell;
-        for (int i = 1; i < ans.length(); i++) {
-           cell=CellEntry.ConvertString(ans.substring(i,i+2));
-            if (cell.isValid()){
-                int type=get(cell.getX(),cell.getY()).getType();
-                if (type==Ex2Utils.FORM || type==Ex2Utils.NUMBER){
-                  SCell.computeForm(get(cell.getX(),cell.getY()).getData());
-                    return ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+2);
-                }
-            }
-            cell=CellEntry.ConvertString(ans.substring(i,i+3));
-            if (cell.isValid()){
-                int type=get(cell.getX(),cell.getY()).getType();
-                if (type==Ex2Utils.FORM || type==Ex2Utils.NUMBER){
-                    SCell.computeForm(get(cell.getX(),cell.getY()).getData());
-                    return ans.substring(0,i)+SCell.computeForm(get(cell.getX(),cell.getY()).getData())+ans.substring(i+3);
-                }
-            }
-        }
-        return ans;
+
+    private Cell changeCellEval(String ans) {
+      SCell c=new SCell(Ex2Utils.EMPTY_CELL);
+      for (int i=1;i<ans.length();i++){
+          if (ans.charAt(i)>='A' && ans.charAt(i)<='Z'){
+              int count=0;
+              for (int j=i+1;j<ans.length();j++){
+                  if (Character.isDigit(ans.charAt(j)))
+                      count++;
+                  else
+                      break;
+              }
+              if (count==0){
+                  c.setData(ans);
+                  return c;
+              }
+              else {
+                  c.setData(c.getData()+getCellValue(ans.substring(i,i+count+1)));
+                  i=i+count;
+              }
+          }
+          else
+              c.setData(c.getData()+ans.charAt(i));
+      }
+      return c;
     }
-}
-
-
-
-/*public class Spreadsheet {
-        private SCell[][] SCells;
-        private int width;
-        private int height;
-
-        // Constructor
-        public Spreadsheet(int width, int height) {
-            this.width = width;
-            this.height = height;
-            SCells = new SCell[width][height];
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    SCells[i][j] = new SCell(""); // תאים ריקים בהתחלה
-                }
-            }
-        }
-
-        //Getter
-        public SCell getCell(int x, int y){
-            return this.SCells[x][y];
-        }
-
-        //Setter
-        public void setCell(int x, int y, SCell c) {
-            this.SCells[x][y]=c;
-        }
-        private int xCell(String c){
-        char letter=c.charAt(0);
-        return letter-'A';
-    }
-
-    private int yCell(String c){
-        String n=c.substring(1,c.length());
-        return Integer.parseInt(n);
-    }
-    public static boolean isCell(String cell) {
-        String x = cell.substring(1, cell.length() );
-        if (cell.charAt(0) >= 'A' & cell.charAt(0) <= 'Z') {
-            try {
-                int a = Integer.parseInt(x);
-                if (a >= 0 & a <= 99)
-                    return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-
-    }*/
+*/

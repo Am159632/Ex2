@@ -8,7 +8,7 @@ public class CellEntry  implements Index2D {
 
     @Override
     public boolean isValid() {
-        return this.x>=0 && this.x<=26 && this.y>=0 && this.y<=99;
+        return this.x>=0 && this.x<=('Z'-'A') && this.y>=0 && this.y<=99;
     }
 
     @Override
@@ -20,6 +20,11 @@ public class CellEntry  implements Index2D {
     public int getY() {
         return this.y;
     }
+
+    public String toString(){
+        return String.valueOf((char)(this.x + 'a') + this.y).toUpperCase();
+    }
+
 
     public static CellEntry ConvertString(String cell) {
         char letter = cell.charAt(0);
