@@ -268,7 +268,10 @@ public class Ex2Sheet implements Sheet {
             }
         }
         SCell c = get(ans.substring(startI, startI + count + 1));
-        return ans.substring(0, startI) + changeCellEval(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
+        if (ans.length()>startI+count+1)
+            return ans.substring(0, startI) + changeCellEval(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
+        return ans.substring(0, startI) + changeCellEval(c.getData()) ;
+
     }
 }
 
