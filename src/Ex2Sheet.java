@@ -60,9 +60,12 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public SCell get(String cords) {
+        SCell ans;
+        if (cords.isEmpty())
+            return new SCell(Ex2Utils.EMPTY_CELL);
         cords = cords.toUpperCase();
         String ycell = cords.substring(1);
-        SCell ans = table[cords.charAt(0) - 'A'][Integer.parseInt(ycell)];
+        ans = table[cords.charAt(0) - 'A'][Integer.parseInt(ycell)];
         return ans;
     }
 
@@ -85,8 +88,12 @@ public class Ex2Sheet implements Sheet {
     @Override
     public void eval() {
         int[][] dd = depth();
+        int depthI =-1;
         for (int i = 0; i < dd.length; i++) {
             for (int j = 0; j < dd[0].length; j++) {
+                if (dd[i][j]==depthI){
+
+                }
             }
         }
     }
@@ -249,7 +256,7 @@ public class Ex2Sheet implements Sheet {
         if (ok)
             return ans;
         int startI = 0, count = 0;
-        for (int i = 1; i < ans.length(); i++) {
+        for (int i = 0; i < ans.length(); i++) {
             if (ans.charAt(i) >= 'A' && ans.charAt(i) <= 'Z') {
                 count = 0;
                 startI = i;
@@ -268,10 +275,21 @@ public class Ex2Sheet implements Sheet {
             }
         }
         SCell c = get(ans.substring(startI, startI + count + 1));
+        if(c.getData()==Ex2Utils.EMPTY_CELL)
+            return Ex2Utils.ERR_FORM;
+        if (c.getType()== Ex2Utils.FORM ) {
+            if (ans.length() > startI + count + 1)
+                return ans.substring(0, startI) + SCell.computeForm(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
+            return ans.substring(0, startI) + SCell.computeForm(c.getData());
+        }
+        if (c.getType()== Ex2Utils.NUMBER){
+            if (ans.length() > startI + count + 1)
+                return ans.substring(0, startI) + SCell.computeForm("="+c.getData()) + changeCellEval(ans.substring(startI + count + 1));
+            return ans.substring(0, startI) + SCell.computeForm("="+c.getData());
+        }
         if (ans.length()>startI+count+1)
             return ans.substring(0, startI) + changeCellEval(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
-        return ans.substring(0, startI) + changeCellEval(c.getData()) ;
-
+        return ans.substring(0, startI) + changeCellEval(c.getData());
     }
 }
 
