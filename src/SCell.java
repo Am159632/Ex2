@@ -154,20 +154,18 @@ public class SCell implements Cell {
 
         form = form.replaceAll("\\s+", "");
 
-        if (form.startsWith("=-(")) {
+        if (form.startsWith("=-")) {
             String x = form.substring(2, form.length());
             return computeForm("=0-1*" + x);
         }
-        if (form.startsWith("=+(")) {
+        if (form.startsWith("=+")) {
             String x = form.substring(2, form.length());
             return computeForm("=" + x);
         }
-
         if (!isValidForm(form))
             throw new RuntimeException("not valid");
 
-        if (form.startsWith("="))
-            form = form.substring(1, form.length());
+        form = form.substring(1, form.length());
 
         if (isNumber(form))
             return Double.parseDouble(form);

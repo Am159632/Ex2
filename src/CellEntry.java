@@ -22,7 +22,8 @@ public class CellEntry  implements Index2D {
     }
 
     public String toString(){
-        return String.valueOf((char)(this.x + 'a') + this.y).toUpperCase();
+        char xx= (char) (this.x+65);
+        return ""+xx+this.y;
     }
 
 

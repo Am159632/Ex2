@@ -48,7 +48,7 @@ public class Ex2Sheet implements Sheet {
            if (eval(x,y)==Ex2Utils.ERR_FORM)
                ans = Ex2Utils.ERR_FORM;
            else
-               ans="" + SCell.computeForm(eval(x,y));
+               ans= "" + SCell.computeForm(eval(x,y));
         }
         return ans;
     }
@@ -242,7 +242,11 @@ public class Ex2Sheet implements Sheet {
         SCell cell = get(x, y);
         if (cell == null)
             return Ex2Utils.EMPTY_CELL;
-        return changeCellEval(cell.getData());
+        String ans=cell.getData();
+        cell.setData(changeCellEval(cell.getData()));
+        if (cell.getType()== Ex2Utils.ERR_FORM_FORMAT)
+            return Ex2Utils.ERR_FORM;
+        return ans;
     }
 
     private String changeCellEval(String ans) {
@@ -283,13 +287,13 @@ public class Ex2Sheet implements Sheet {
             return ans.substring(0, startI) + SCell.computeForm(c.getData());
         }
         if (c.getType()== Ex2Utils.NUMBER){
-            if (ans.length() > startI + count + 1)
+            if (ans.length() > startI + count)
                 return ans.substring(0, startI) + SCell.computeForm("="+c.getData()) + changeCellEval(ans.substring(startI + count + 1));
             return ans.substring(0, startI) + SCell.computeForm("="+c.getData());
         }
         if (ans.length()>startI+count+1)
-            return ans.substring(0, startI) + changeCellEval(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
-        return ans.substring(0, startI) + changeCellEval(c.getData());
+            return ans.substring(0, startI) + changeCellEval(c.getData().substring(1)) + changeCellEval(ans.substring(startI + count + 1));
+        return ans.substring(0, startI) + changeCellEval(c.getData().substring(1));
     }
 }
 

@@ -4,6 +4,7 @@ public class Ex2Main {
     public static void main(String[] args) {
         SCell c = new SCell("=4+4+(4*4/(4*4/(4+4)-(4*4)/4-(4*4)+4*4)/4-4)");
        // boolean ok= Double.isInfinite(SCell.computeForm(c.getData()));
+
         System.out.println(SCell.computeForm(c.getData()));
         CellEntry ce=CellEntry.ConvertString("A1");
         System.out.println(ce.getX()+""+ce.getY());
