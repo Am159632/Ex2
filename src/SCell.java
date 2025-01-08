@@ -132,7 +132,6 @@ public class SCell implements Cell {
         for (int i = 0; i < text.length(); i++) {
             char x = text.charAt(i);
             if (x != '*' && x != '/' && x != '+' && x != '-' && x != '(' && x != ')' && x != '.' && !Character.isDigit(x)) {
-                if (x<'d' && x>'f')
                     return false;
             }
         }

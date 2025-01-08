@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,14 +41,10 @@ public class Ex2Sheet implements Sheet {
             return ans;
         if (c.getType() == Ex2Utils.NUMBER)
             return ans;
+        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT)
+               ans = Ex2Utils.ERR_FORM;
         if (c.getType() == Ex2Utils.FORM)
             ans = "" + SCell.computeForm(c.getData());
-        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT) {
-           if (eval(x,y)==Ex2Utils.ERR_FORM)
-               ans = Ex2Utils.ERR_FORM;
-           else
-               ans= "" + SCell.computeForm(eval(x,y));
-        }
         return ans;
     }
 
@@ -143,18 +138,18 @@ public class Ex2Sheet implements Sheet {
 
         for (int index = 0; index < cells.size() && !isCyclic; index++) {
             String cellStr = cells.get(index);
-            // get the X & Y of the cell and if not cyclic -> dig deeper
+
             int x = cellStr.toLowerCase().charAt(0) - 'a';
             int y = Integer.parseInt(cellStr.substring(1));
             Cell cell = table[x][y];
-            if (visited.contains(cellStr)) {
-                isCyclic = true;
-                visited.clear();
-            }
-            if (!isCyclic) {
-                visited.add(cellStr);
-                order += calculateOrder(visited, extractCells(cell));
-            }
+                if (visited.contains(cellStr)) {
+                    isCyclic = true;
+                    visited.clear();
+                }
+                if (!isCyclic) {
+                    visited.add(cellStr);
+                    order += calculateOrder(visited, extractCells(cell));
+                }
         }
 
         if (visited.isEmpty()) return -1;
@@ -169,9 +164,13 @@ public class Ex2Sheet implements Sheet {
 
         Pattern pattern = Pattern.compile("[a-zA-Z]+\\d+");
         Matcher matcher = pattern.matcher(cell.getData());
+        List<String> currentRoundVisited = new ArrayList<>();
 
         while (matcher.find()) {
-            cells.add(matcher.group());
+            if (!currentRoundVisited.contains(matcher.group())) {
+                currentRoundVisited.add(matcher.group());
+                cells.add(matcher.group());
+            }
         }
 
         return cells;
@@ -179,32 +178,46 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void load(String fileName) throws IOException {
-        table = new SCell[Ex2Utils.WIDTH][Ex2Utils.HEIGHT];
+        // איפוס הטבלה הקיימת
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table[i].length; j++) {
-                table[i][j] = new SCell("");
+                table[i][j] = new SCell(""); // תא ריק
             }
         }
+
         String line;
         String delimiter = ",";
+        boolean isFirstLine = true;
 
+        // קריאה מהקובץ
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             while ((line = br.readLine()) != null) {
+                // דילוג על שורת הכותרת
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+
                 String[] values = line.split(delimiter);
-                // 3 is a normal line, 4 with remark
-                if (values.length == 3 || values.length == 4) {
+
+                // בדיקה אם השורה מכילה נתונים תקינים
+                if (values.length >= 3) {
                     String x = values[0];
                     String y = values[1];
                     String data = values[2];
 
                     if (isNumber(x) && isNumber(y)) {
-                        table[Integer.parseInt(x)][Integer.parseInt(y)] = new SCell(data);
+                        int row = Integer.parseInt(x);
+                        int col = Integer.parseInt(y);
+
+                        // עדכון הטבלה בנתונים מהקובץ
+                        table[row][col] = new SCell(data);
                     }
                 }
             }
         }
-
     }
+
 
     private boolean isNumber(String text) {
         try {
@@ -215,27 +228,21 @@ public class Ex2Sheet implements Sheet {
         }
     }
 
-    @Override
     public void save(String fileName) throws IOException {
-
         try (FileWriter writer = new FileWriter(fileName)) {
-            writer.append("Header");
+            writer.append("Header\n"); // כותרת הקובץ
 
             for (int i = 0; i < table.length; i++) {
-                for (int j = 0; j < table[0].length; j++) {
-                    if (table[i][j] != null && !Objects.equals(table[i][j].getData(), "")) {
-                        writer.append(String.valueOf(i))
-                                .append(",")
-                                .append(String.valueOf(j))
-                                .append(",")
-                                .append(table[i][j].getData())
-                                .append("\n");
-                    }
+                for (int j = 0; j < table[i].length; j++) {
+                    String data = table[i][j].getData();
+                    // שומרים את כל התאים, כולל תאים ריקים
+                    writer.append(i + "," + j + "," + data + "\n");
                 }
             }
         }
-
+        System.out.println("Data saved successfully to " + fileName);
     }
+
 
     @Override
     public String eval(int x, int y) {
