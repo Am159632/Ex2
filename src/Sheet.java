@@ -65,11 +65,12 @@ public interface Sheet {
     public String value(int x, int y);
     /**
      * Evaluates (computes) the value of the cell in the x,y coordinate.
+     *
      * @param x integer, x-coordinate of the cell.
      * @param y integer, y-coordinate of the cell.
      * @return the string that will be presented in the x,y cell
      */
-    public String eval(int x, int y);
+    public SCell eval(int x, int y);
 
     /**
      * Evaluates (computes) all the values of all the cells in this spreadsheet.

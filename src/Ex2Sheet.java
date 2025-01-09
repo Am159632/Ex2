@@ -37,14 +37,20 @@ public class Ex2Sheet implements Sheet {
             return Ex2Utils.EMPTY_CELL;
         if (c.getOrder() == Ex2Utils.ERR_CYCLE_FORM)
             return Ex2Utils.ERR_CYCLE;
+        if (c.getType() == Ex2Utils.FORM)
+            ans = "" + SCell.computeForm(c.getData());
         if (c.getType() == Ex2Utils.TEXT)
             return ans;
         if (c.getType() == Ex2Utils.NUMBER)
             return ans;
-        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT)
-               ans = Ex2Utils.ERR_FORM;
-        if (c.getType() == Ex2Utils.FORM)
-            ans = "" + SCell.computeForm(c.getData());
+        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT) {
+            if (eval(x, y).getType() == Ex2Utils.ERR_FORM_FORMAT)
+                return Ex2Utils.ERR_FORM;
+            if (eval(x, y).getType() == Ex2Utils.FORM) {
+                ans = "" + SCell.computeForm(eval(x, y).getData());
+                get(x,y).setType(Ex2Utils.FORM);
+            }
+        }
         return ans;
     }
 
@@ -161,10 +167,10 @@ public class Ex2Sheet implements Sheet {
 
     private List<String> extractCells(Cell cell) {
         List<String> cells = new ArrayList<>();
+        List<String> currentRoundVisited = new ArrayList<>();
 
         Pattern pattern = Pattern.compile("[a-zA-Z]+\\d+");
         Matcher matcher = pattern.matcher(cell.getData());
-        List<String> currentRoundVisited = new ArrayList<>();
 
         while (matcher.find()) {
             if (!currentRoundVisited.contains(matcher.group())) {
@@ -245,15 +251,41 @@ public class Ex2Sheet implements Sheet {
 
 
     @Override
-    public String eval(int x, int y) {
-        SCell cell = get(x, y);
-        if (cell == null)
-            return Ex2Utils.EMPTY_CELL;
-        String ans=cell.getData();
-        cell.setData(changeCellEval(cell.getData()));
-        if (cell.getType()== Ex2Utils.ERR_FORM_FORMAT)
-            return Ex2Utils.ERR_FORM;
-        return ans;
+    public SCell eval(int x, int y) {
+        SCell newcell=new SCell(changeCell(get(x,y).getData()));
+
+        if (newcell==null)
+            newcell.setData("=@");
+        if (newcell.getType()== Ex2Utils.ERR_FORM_FORMAT)
+            newcell.setData("=@");
+
+        return newcell;
+    }
+
+    private String changeCell(String cell){
+        StringBuffer ans=new StringBuffer(cell);
+
+        Pattern pattern = Pattern.compile("[a-zA-Z]+\\d+");
+        Matcher matcher = pattern.matcher(ans);
+
+        boolean found=false;
+
+        while (matcher.find()){
+            found=true;
+            String match=matcher.group();
+            int start = matcher.start();
+            int end = matcher.end();
+            if (get(match).getType()== Ex2Utils.NUMBER)
+                ans.replace(start,end,"("+get(match).getData()+")");
+            if (get(match).getType()== Ex2Utils.FORM || get(match).getType()== Ex2Utils.ERR_FORM_FORMAT)
+                ans.replace(start,end,"("+get(match).getData().substring(1)+")");
+            if (get(match).getType()== Ex2Utils.TEXT || get(match).getData()== Ex2Utils.EMPTY_CELL)
+                ans.replace(start,end,"@");
+        }
+        if (!found)
+            return ans.toString();
+
+        return changeCell(ans.toString());
     }
 
     private String changeCellEval(String ans) {
@@ -303,43 +335,3 @@ public class Ex2Sheet implements Sheet {
         return ans.substring(0, startI) + changeCellEval(c.getData().substring(1));
     }
 }
-
-
-    /*@Override
-    public String eval(int x, int y) {
-            if (changeCellEval(get(x,y).getData()).getType() == Ex2Utils.ERR_FORM_FORMAT)
-                return Ex2Utils.ERR_FORM;
-        return value(x, y);
-    }
-    private double getCellValue(String cell){
-        CellEntry c=CellEntry.ConvertString(cell);
-        return SCell.computeForm(get(c.getX(),c.getY()).getData());
-    }
-
-
-    private Cell changeCellEval(String ans) {
-      SCell c=new SCell(Ex2Utils.EMPTY_CELL);
-      for (int i=1;i<ans.length();i++){
-          if (ans.charAt(i)>='A' && ans.charAt(i)<='Z'){
-              int count=0;
-              for (int j=i+1;j<ans.length();j++){
-                  if (Character.isDigit(ans.charAt(j)))
-                      count++;
-                  else
-                      break;
-              }
-              if (count==0){
-                  c.setData(ans);
-                  return c;
-              }
-              else {
-                  c.setData(c.getData()+getCellValue(ans.substring(i,i+count+1)));
-                  i=i+count;
-              }
-          }
-          else
-              c.setData(c.getData()+ans.charAt(i));
-      }
-      return c;
-    }
-*/

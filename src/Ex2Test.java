@@ -22,7 +22,7 @@ public class Ex2Test {
     void eval(){
         sheet.set(0,0,"=1+3*4-5");
         sheet.set(0,1,"=A0+1");
-        assertEquals(SCell.computeForm("="+sheet.eval(0,1)),9.0);
+        assertEquals(SCell.computeForm(""+sheet.eval(0,1)),9.0);
     }
 
     @Test
