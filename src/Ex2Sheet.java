@@ -37,7 +37,6 @@ public class Ex2Sheet implements Sheet {
             return Ex2Utils.EMPTY_CELL;
         if (c.getOrder() == Ex2Utils.ERR_CYCLE_FORM)
             return Ex2Utils.ERR_CYCLE;
-
         if (c.getType() == Ex2Utils.TEXT)
             return ans;
         if (c.getType() == Ex2Utils.NUMBER)
@@ -89,10 +88,21 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void eval() {
+        int maxD =-1;
         int[][] dd = depth();
         for (int i = 0; i < dd.length; i++) {
             for (int j = 0; j < dd[0].length; j++) {
-
+                if (maxD<dd[i][j])
+                    maxD=dd[i][j];
+            }
+        }
+        for (int d=-1;d<=maxD;maxD++) {
+            for (int i = 0; i < dd.length; i++) {
+                for (int j = 0; j < dd[0].length; j++) {
+                    if (d==dd[i][j]){
+                        value(i,j);
+                    }
+                }
             }
         }
     }
