@@ -70,7 +70,7 @@ public interface Sheet {
      * @param y integer, y-coordinate of the cell.
      * @return the string that will be presented in the x,y cell
      */
-    public SCell eval(int x, int y);
+    public String eval(int x, int y);
 
     /**
      * Evaluates (computes) all the values of all the cells in this spreadsheet.
