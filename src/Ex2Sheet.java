@@ -113,7 +113,6 @@ public class Ex2Sheet implements Sheet {
 //                                if (newcell.getType() == Ex2Utils.FORM) {
 //                                    table[i][j].setType(Ex2Utils.FORM);
 //                                }
-//
 //                        }
 //                    }
 //                }
@@ -158,33 +157,31 @@ public class Ex2Sheet implements Sheet {
             return 0;
         }
 
-        int order = 1;
-
-        int max = 0;
-
+        int maxOrder = 0;
         boolean isCyclic = false;
 
-        for (int index = 0; index < cells.size() && !isCyclic; index++) {
-            String cellStr = cells.get(index);
+        for (String cellStr : cells) {
+            List<String> currentPath = new ArrayList<>(visited);
 
             int x = cellStr.toLowerCase().charAt(0) - 'a';
             int y = Integer.parseInt(cellStr.substring(1));
             Cell cell = table[x][y];
-                if (visited.contains(cellStr)) {
-                    isCyclic = true;
-                    visited.clear();
-                }
-                if (!isCyclic) {
-                    visited.add(cellStr);
-                    order += calculateOrder(visited, extractCells(cell));
-                }
+
+            if (currentPath.contains(cellStr)) {
+                return -1;  // Cyclic dependency detected
+            }
+
+            currentPath.add(cellStr);
+            int orderResult = calculateOrder(currentPath, extractCells(cell));
+
+            if (orderResult == -1) {
+                return -1;  // Propagate cyclic dependency error
+            }
+
+            maxOrder = Math.max(maxOrder, orderResult + 1);
         }
 
-        if (visited.isEmpty()) return -1;
-
-        max = Math.max(max, order);
-
-        return max;
+        return maxOrder;
     }
 
     private List<String> extractCells(Cell cell) {
