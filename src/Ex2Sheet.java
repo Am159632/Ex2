@@ -271,7 +271,7 @@ public class Ex2Sheet implements Sheet {
 
     public void save(String fileName) throws IOException {
         try (FileWriter writer = new FileWriter(fileName)) {
-            writer.append("Header\n"); // כותרת הקובץ
+            writer.append("I2CS ArielU: SpreadSheet (Ex2) assignment -\n"); // כותרת הקובץ
 
             for (int i = 0; i < table.length; i++) {
                 for (int j = 0; j < table[i].length; j++) {
