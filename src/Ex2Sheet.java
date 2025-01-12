@@ -31,9 +31,10 @@ public class Ex2Sheet implements Sheet {
         Cell c = get(x, y);
         c.setData(c.getData());
         c.setOrder(depth()[x][y]);
-        if (c != null) {
+
+        if (c != null)
             ans = c.toString();
-        }
+
         if (ans == Ex2Utils.EMPTY_CELL)
             return Ex2Utils.EMPTY_CELL;
         if (c.getOrder() == Ex2Utils.ERR_CYCLE_FORM) {
@@ -158,7 +159,6 @@ public class Ex2Sheet implements Sheet {
         }
 
         int maxOrder = 0;
-        boolean isCyclic = false;
 
         for (String cellStr : cells) {
             List<String> currentPath = new ArrayList<>(visited);
