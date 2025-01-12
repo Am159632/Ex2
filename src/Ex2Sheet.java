@@ -23,6 +23,19 @@ public class Ex2Sheet implements Sheet {
     public Ex2Sheet() {
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
     }
+    private boolean isLetterValid(String data){
+        int maxL=0,count=0;
+        for (int i=0;i<data.length();i++){
+            if (Character.isLetter(data.charAt(i))) {
+                count++;
+            }else {
+                if (count>1)
+                    return false;
+                count=0;
+            }
+        }
+        return true;
+    }
 
     @Override
     public String value(int x, int y) {
@@ -34,6 +47,8 @@ public class Ex2Sheet implements Sheet {
 
         if (c != null)
             ans = c.toString();
+        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT && !isLetterValid(c.getData()))
+            return Ex2Utils.ERR_FORM;
 
         if (ans == Ex2Utils.EMPTY_CELL)
             return Ex2Utils.EMPTY_CELL;
@@ -160,6 +175,7 @@ public class Ex2Sheet implements Sheet {
 
         int maxOrder = 0;
 
+
         for (String cellStr : cells) {
             List<String> currentPath = new ArrayList<>(visited);
 
@@ -188,7 +204,7 @@ public class Ex2Sheet implements Sheet {
         List<String> cells = new ArrayList<>();
         List<String> currentRoundVisited = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("[a-zA-Z]+\\d+");
+        Pattern pattern = Pattern.compile("[a-zA-Z](\\d+)");
         Matcher matcher = pattern.matcher(cell.getData());
 
         while (matcher.find()) {
