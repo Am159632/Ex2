@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Ex2Test {
 
     Ex2Sheet sheet =new Ex2Sheet(2,2);
-    SCell c=new SCell(Ex2Utils.EMPTY_CELL);
+
     @Test
     void computeFormTest(){
         double a=SCell.computeForm("=8.7");
         assertEquals(a,8.7);
+        a=SCell.computeForm("= 1 + 2 ");
+        assertEquals(a,3.0);
         a=SCell.computeForm("=((1+3)*((3-1.5))+3)");
         assertEquals(a,9);
         a=SCell.computeForm("=4+4+(4*4/(4*4/(4+4)-(4*4)/4-(4*4)+4*4)/4-4)");
@@ -28,6 +30,8 @@ public class Ex2Test {
         assertEquals(SCell.computeForm(sheet.eval(0, 1)),-9.9);
         sheet.set(1,0,"=(A1-0.1)*0.2");
         assertEquals(SCell.computeForm(sheet.eval(1, 0)),-2);
+        sheet.set(1,1,"=B0*(A1-0.1)/4-A0");
+        assertEquals(SCell.computeForm(sheet.eval(1, 1)),-3);
     }
 
     @Test
@@ -47,5 +51,9 @@ public class Ex2Test {
         assertEquals(sheet.depth()[0][1],1);
         assertEquals(sheet.depth()[1][0],2);
         assertEquals(sheet.depth()[1][1],3);
+        sheet.set(0,0,"=1");
+        sheet.set(0,1,"=A0+A0");
+        sheet.set(1,0,"=A0+A1");
+        sheet.set(1,1,"=B0+A0");
     }
 }
