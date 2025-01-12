@@ -9,7 +9,6 @@ public class Ex2Test {
     SCell c=new SCell(Ex2Utils.EMPTY_CELL);
     CellEntry index=new CellEntry(0,0);
     int x,y;
-   final double eps=0.01;
 
     @Test
     void computeFormTest(){
