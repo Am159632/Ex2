@@ -40,7 +40,7 @@ public class Ex2Test {
         sheet.set(1,0,"=A0+A1");
         assertEquals(sheet.depth()[1][0],-1);
         sheet.set(0,0,"=1");
-        sheet.set(0,1,"=A0+1");
+        sheet.set(0,1,"=A0+A0");
         sheet.set(1,0,"=A0+A1");
         sheet.set(1,1,"=B0+A0");
         assertEquals(sheet.depth()[0][0],0);
