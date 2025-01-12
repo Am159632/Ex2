@@ -29,6 +29,7 @@ public class Ex2Sheet implements Sheet {
         String ans = Ex2Utils.EMPTY_CELL;
 
         Cell c = get(x, y);
+        c.setData(c.getData());
         c.setOrder(depth()[x][y]);
         if (c != null) {
             ans = c.toString();
