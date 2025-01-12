@@ -7,9 +7,6 @@ public class Ex2Test {
 
     Ex2Sheet sheet =new Ex2Sheet(2,2);
     SCell c=new SCell(Ex2Utils.EMPTY_CELL);
-    CellEntry index=new CellEntry(0,0);
-    int x,y;
-
     @Test
     void computeFormTest(){
         double a=SCell.computeForm("=8.7");

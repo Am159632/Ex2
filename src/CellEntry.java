@@ -25,12 +25,4 @@ public class CellEntry  implements Index2D {
         char xx= (char) (this.x+65);
         return ""+xx+this.y;
     }
-
-
-    public static CellEntry ConvertString(String cell) {
-        char letter = cell.charAt(0);
-        int x = letter - 'A';
-        int y = Integer.parseInt(cell.substring(1)) - 1;
-        return new CellEntry(x, y);
-    }
 }
