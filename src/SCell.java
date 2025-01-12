@@ -69,6 +69,12 @@ public class SCell implements Cell {
         }
     }
 
+    /**
+     * +|- = 1, *|/ =2
+     * @param c
+     * @return value of the operator
+     */
+
 
     private static int valueOP(char c) {
         if (c == '+' | c == '-')
@@ -77,6 +83,14 @@ public class SCell implements Cell {
             return 2;
         return 3;
     }
+
+    /**
+     * Calculates the formula according to the operator
+     * @param op
+     * @param l
+     * @param r
+     * @return the value of the calculate
+     */
 
     private static double cal(char op, double l, double r) {
         if (op == '*')
@@ -87,6 +101,13 @@ public class SCell implements Cell {
             return l - r;
         return l / r;
     }
+
+    /**
+     * Checks where the index of the operator is according to the one outside the parentheses
+     * and the last one due to the order of operations
+     * @param text
+     * @return index of the operator that we want to calculate this round
+     */
 
     public static int indOfMainOp(String text) {
         int count = 0, index = -1, lowOP = 3;
@@ -149,9 +170,15 @@ public class SCell implements Cell {
         }
     }
 
+    /**
+     * compute the formula
+     * @param form
+     * @return the value of the formula
+     */
+
     public static Double computeForm(String form) {
 
-        form = form.replaceAll("\\s+", "");
+        form = form.replaceAll("\\s+", "");//delete spaces
         if (form.startsWith("=-")) {
             String x = form.substring(2, form.length());
             return computeForm("=0-1*" + x);
@@ -165,7 +192,7 @@ public class SCell implements Cell {
 
         form = form.substring(1, form.length());
 
-        if (isNumber(form))
+        if (isNumber(form)) //Stopping condition
             return Double.parseDouble(form);
 
         if (form.startsWith("(") & form.endsWith(")")) {
