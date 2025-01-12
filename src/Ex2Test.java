@@ -19,6 +19,8 @@ public class Ex2Test {
         assertEquals(a,2);
         a=SCell.computeForm("=(4-2)*3-5/(2*3.5-10+1.5*2)");
         assertTrue(Double.isInfinite(a));
+        a=SCell.computeForm("=6-(-6)");
+        assertEquals(a,12);
     }
 
     @Test
