@@ -1,3 +1,5 @@
+import com.sun.source.tree.Tree;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,15 +25,16 @@ public class Ex2Sheet implements Sheet {
     public Ex2Sheet() {
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
     }
-    private boolean isLetterValid(String data){
-        int maxL=0,count=0;
-        for (int i=0;i<data.length();i++){
+
+    private boolean isLetterValid(String data) {
+        int maxL = 0, count = 0;
+        for (int i = 0; i < data.length(); i++) {
             if (Character.isLetter(data.charAt(i))) {
                 count++;
-            }else {
-                if (count>1)
+            } else {
+                if (count > 1)
                     return false;
-                count=0;
+                count = 0;
             }
         }
         return true;
@@ -53,7 +56,7 @@ public class Ex2Sheet implements Sheet {
         if (ans == Ex2Utils.EMPTY_CELL)
             return Ex2Utils.EMPTY_CELL;
         if (c.getOrder() == Ex2Utils.ERR_CYCLE_FORM) {
-            get(x,y).setType(Ex2Utils.ERR_CYCLE_FORM);
+            get(x, y).setType(Ex2Utils.ERR_CYCLE_FORM);
             return Ex2Utils.ERR_CYCLE;
         }
         if (c.getType() == Ex2Utils.TEXT)
@@ -61,13 +64,13 @@ public class Ex2Sheet implements Sheet {
         if (c.getType() == Ex2Utils.NUMBER)
             return ans;
 
-        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT ||  (c.getType() == Ex2Utils.FORM)) {
-            SCell newcell=new SCell(eval(x,y));
+        if (c.getType() == Ex2Utils.ERR_FORM_FORMAT || (c.getType() == Ex2Utils.FORM)) {
+            SCell newcell = new SCell(eval(x, y));
             if (newcell.getType() == Ex2Utils.ERR_FORM_FORMAT)
                 return Ex2Utils.ERR_FORM;
             if (newcell.getType() == Ex2Utils.FORM) {
                 ans = "" + SCell.computeForm(newcell.getData());
-                get(x,y).setType(Ex2Utils.FORM);
+                get(x, y).setType(Ex2Utils.FORM);
             }
         }
         return ans;
@@ -106,7 +109,7 @@ public class Ex2Sheet implements Sheet {
     }
 
     @Override
-   public void eval() {
+    public void eval() {
 //        int maxD =-1;
 //        int[][] dd = depth();
 //        for (int i = 0; i < dd.length; i++) {
@@ -287,121 +290,34 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public String eval(int x, int y) {
-        return (changeCell(get(x,y).getData()));
+        return (changeCell(get(x, y).getData()));
     }
 
-    private String changeCell(String cell){
-        StringBuffer ans=new StringBuffer(cell);
+    private String changeCell(String cell) {
+        StringBuffer ans = new StringBuffer(cell);
 
         Pattern pattern = Pattern.compile("[a-zA-Z]+\\d+");
         Matcher matcher = pattern.matcher(ans);
 
-        boolean found=false;
+        boolean found = false;
 
-        while (matcher.find()){
-            found=true;
-            String match=matcher.group();
+        while (matcher.find()) {
+            found = true;
+            String match = matcher.group();
             int start = matcher.start();
             int end = matcher.end();
-            if (get(match).getType()== Ex2Utils.NUMBER)
-                ans.replace(start,end,"("+get(match).getData()+")");
-            if (get(match).getType()== Ex2Utils.FORM || get(match).getType()== Ex2Utils.ERR_FORM_FORMAT)
-                ans.replace(start,end,"("+get(match).getData().substring(1)+")");
-            if (get(match).getType()== Ex2Utils.TEXT || get(match).getData()== Ex2Utils.EMPTY_CELL)
-                ans.replace(start,end,"=@");
-            if (get(match).getType()== Ex2Utils.ERR_CYCLE_FORM)
-                ans.replace(start,end,"("+get(match).getData().substring(1)+")");
+            if (get(match).getType() == Ex2Utils.NUMBER)
+                ans.replace(start, end, "(" + get(match).getData() + ")");
+            if (get(match).getType() == Ex2Utils.FORM || get(match).getType() == Ex2Utils.ERR_FORM_FORMAT)
+                ans.replace(start, end, "(" + get(match).getData().substring(1) + ")");
+            if (get(match).getType() == Ex2Utils.TEXT || get(match).getData() == Ex2Utils.EMPTY_CELL)
+                ans.replace(start, end, "=@");
+            if (get(match).getType() == Ex2Utils.ERR_CYCLE_FORM)
+                ans.replace(start, end, "(" + get(match).getData().substring(1) + ")");
         }
         if (!found)
             return ans.toString();
 
         return changeCell(ans.toString());
     }
-
-    private String changeCellEval(String ans) {
-        if (ans.isEmpty())
-            return null;
-        boolean ok=true;
-        for (int i=0;i<ans.length();i++){
-            if (Character.isLetter(ans.charAt(i)))
-                ok=false;
-        }
-        if (ok)
-            return ans;
-        int startI = 0, count = 0;
-        for (int i = 0; i < ans.length(); i++) {
-            if (ans.charAt(i) >= 'A' && ans.charAt(i) <= 'Z') {
-                count = 0;
-                startI = i;
-                for (int j = i + 1; j < ans.length(); j++) {
-                    if (Character.isDigit(ans.charAt(j))) {
-                        count++;
-                    } else {
-                        break;
-                    }
-                }
-                if (count == 0) {
-                    return Ex2Utils.ERR_FORM;
-                } else {
-                    break;
-                }
-            }
-        }
-        SCell c = get(ans.substring(startI, startI + count + 1));
-        if(c.getData()==Ex2Utils.EMPTY_CELL)
-            return Ex2Utils.ERR_FORM;
-        if (c.getType()== Ex2Utils.FORM ) {
-            if (ans.length() > startI + count + 1)
-                return ans.substring(0, startI) + SCell.computeForm(c.getData()) + changeCellEval(ans.substring(startI + count + 1));
-            return ans.substring(0, startI) + SCell.computeForm(c.getData());
-        }
-        if (c.getType()== Ex2Utils.NUMBER){
-            if (ans.length() > startI + count)
-                return ans.substring(0, startI) + SCell.computeForm("="+c.getData()) + changeCellEval(ans.substring(startI + count + 1));
-            return ans.substring(0, startI) + SCell.computeForm("="+c.getData());
-        }
-        if (ans.length()>startI+count+1)
-            return ans.substring(0, startI) + changeCellEval(c.getData().substring(1)) + changeCellEval(ans.substring(startI + count + 1));
-        return ans.substring(0, startI) + changeCellEval(c.getData().substring(1));
-    }
 }
-
-
-    /*@Override
-    public String eval(int x, int y) {
-            if (changeCellEval(get(x,y).getData()).getType() == Ex2Utils.ERR_FORM_FORMAT)
-                return Ex2Utils.ERR_FORM;
-        return value(x, y);
-    }
-    private double getCellValue(String cell){
-        CellEntry c=CellEntry.ConvertString(cell);
-        return SCell.computeForm(get(c.getX(),c.getY()).getData());
-    }
-
-
-    private Cell changeCellEval(String ans) {
-      SCell c=new SCell(Ex2Utils.EMPTY_CELL);
-      for (int i=1;i<ans.length();i++){
-          if (ans.charAt(i)>='A' && ans.charAt(i)<='Z'){
-              int count=0;
-              for (int j=i+1;j<ans.length();j++){
-                  if (Character.isDigit(ans.charAt(j)))
-                      count++;
-                  else
-                      break;
-              }
-              if (count==0){
-                  c.setData(ans);
-                  return c;
-              }
-              else {
-                  c.setData(c.getData()+getCellValue(ans.substring(i,i+count+1)));
-                  i=i+count;
-              }
-          }
-          else
-              c.setData(c.getData()+ans.charAt(i));
-      }
-      return c;
-    }
-*/
