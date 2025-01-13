@@ -1,3 +1,0 @@
-I2CS ArielU: SpreadSheet (Ex2) assignment - this line should be ignored in the load method
-0,0,5
-0,1,=A0

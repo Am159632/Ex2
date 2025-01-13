@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,7 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Ex2Test {
 
-    Ex2Sheet sheet =new Ex2Sheet(2,2);
+    private Ex2Sheet sheet;
+    @BeforeEach
+    void setUp() {
+        sheet = new Ex2Sheet(2, 2);
+    }
 
     @Test
     void computeFormTest(){
@@ -14,11 +19,11 @@ public class Ex2Test {
         assertEquals(a,8.7);
         a= SCell.computeForm("= 1 + 2 ");
         assertEquals(a,3.0);
-        a= SCell.computeForm("=((1+3)*((3-1.5))+3)");
-        assertEquals(a,9);
+        a= SCell.computeForm("=-((1+3)*((3-1.5))+3)");
+        assertEquals(a,-9);
         a= SCell.computeForm("=4+4+(4*4/(4*4/(4+4)-(4*4)/4-(4*4)+4*4)/4-4)");
         assertEquals(a,2);
-        a= SCell.computeForm("=(4-2)*3-5/(2*3.5-10+1.5*2)");
+        a= SCell.computeForm("=+(4-2)*3-5/(2*3.5-10+1.5*2)-8+2*(4-5)");
         assertTrue(Double.isInfinite(a));
         a= SCell.computeForm("=6-(-6)");
         assertEquals(a,12);
