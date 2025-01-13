@@ -32,14 +32,14 @@ The system allows users to input different values into cells, perform mathematic
 
 ## Explanation of Key Functions
 
-### 1. **Formula Calculation - `computeForm`**
-This function takes a mathematical formula, checks the format's validity, and computes the formula's result.
-
-### 2. **Formula Validation - `isValidForm`**
+### 1. **Formula Validation - `isValidForm`**
 This function ensures that a formula adheres to the syntax rules. It checks that:
 - The formula starts with `=`.
 - There are no mismatched parentheses.
 - The formula contains only valid characters (digits, mathematical operators, etc.).
+
+### 2. **Formula Calculation - `computeForm`**
+This function takes a mathematical formula, checks the format's validity, and computes the formula's result.
 
 ### 3. **Cell Data Conversion - `eval`**
 This function replaces references to other cells (e.g., `A1`) with their respective values, enabling proper formula computation.
