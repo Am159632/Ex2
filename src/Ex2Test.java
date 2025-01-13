@@ -37,6 +37,20 @@ public class Ex2Test {
     }
 
     @Test
+    void value(){
+        sheet.set(0,0,"Asaf");
+        assertEquals(sheet.value(0,0),"Asaf");
+        sheet.set(0,1,"8");
+        assertEquals(sheet.value(0,1),"8");
+        sheet.set(1,0,"=A0");
+        assertEquals(sheet.value(1,0),Ex2Utils.ERR_FORM);
+        sheet.set(1,1,"=A1-4");
+        assertEquals(sheet.value(1,1),"4.0");
+        sheet.set(0,1,"=B1");
+        assertEquals(sheet.value(0,1),Ex2Utils.ERR_CYCLE);
+    }
+
+    @Test
     void depth(){
         sheet.set(0,0,"5");
         sheet.set(0,1,"=A0");
@@ -53,9 +67,10 @@ public class Ex2Test {
         assertEquals(sheet.depth()[0][1],1);
         assertEquals(sheet.depth()[1][0],2);
         assertEquals(sheet.depth()[1][1],3);
-        sheet.set(0,0,"=1");
-        sheet.set(0,1,"=A0+A0");
-        sheet.set(1,0,"=A0+A1");
-        sheet.set(1,1,"=B0+A0");
+        sheet.set(0,0,"=B1");
+        assertEquals(sheet.depth()[0][0],-1);
+        assertEquals(sheet.depth()[0][1],-1);
+        assertEquals(sheet.depth()[1][0],-1);
+        assertEquals(sheet.depth()[1][1],-1);
     }
 }

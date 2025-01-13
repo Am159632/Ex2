@@ -1,5 +1,3 @@
-import com.sun.source.tree.Tree;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,6 +23,13 @@ public class Ex2Sheet implements Sheet {
     public Ex2Sheet() {
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
     }
+
+    /**
+     * Validates letter patterns in cell references
+     * KEY FEATURE: Ensures only single letters are used in cell references (e.g., A1 is valid, AA1 is not)
+     * @param data
+     * @return if valid
+     */
 
     private boolean isLetterValid(String data) {
         int maxL = 0, count = 0;
@@ -65,7 +70,7 @@ public class Ex2Sheet implements Sheet {
             return ans;
 
         if (c.getType() == Ex2Utils.ERR_FORM_FORMAT || (c.getType() == Ex2Utils.FORM)) {
-            SCell newcell = new SCell(eval(x, y));
+            SCell newcell = new SCell(eval(x, y));//change the cell that he depend on
             if (newcell.getType() == Ex2Utils.ERR_FORM_FORMAT)
                 return Ex2Utils.ERR_FORM;
             if (newcell.getType() == Ex2Utils.FORM) {
@@ -153,13 +158,20 @@ public class Ex2Sheet implements Sheet {
                 if (table[i][j].getType() == Ex2Utils.ERR_FORM_FORMAT) {
                     order = calculateOrder(i, j);
                 }
-                table[i][j].setOrder(order);
+                table[i][j].setOrder(order);//update the order of each cell
                 ans[i][j] = order;
             }
         }
 
         return ans;
     }
+
+    /**
+     * Calculates dependency depth for specific cell
+     * @param i
+     * @param j
+     * @return calculate of the depth of the cells he depends on
+     */
 
     private int calculateOrder(int i, int j) {
         Cell cell = table[i][j];
@@ -171,8 +183,16 @@ public class Ex2Sheet implements Sheet {
         return calculateOrder(visited, extractCells(cell));
     }
 
+    /**
+     * Recursive order calculation for dependency tracking
+     * @param visited
+     * @param cells
+     * @return if cycle=-1,else the max of the celles he depens on
+     */
+
+
     private int calculateOrder(List<String> visited, List<String> cells) {
-        if (cells.isEmpty()) {
+        if (cells.isEmpty()) {//base case
             return 0;
         }
 
@@ -191,10 +211,10 @@ public class Ex2Sheet implements Sheet {
             }
 
             currentPath.add(cellStr);
-            int orderResult = calculateOrder(currentPath, extractCells(cell));
+            int orderResult = calculateOrder(currentPath, extractCells(cell));//recursion
 
             if (orderResult == -1) {
-                return -1;  // Propagate cyclic dependency error
+                return -1;  // Return -1 if cycle detected in deeper levels
             }
 
             maxOrder = Math.max(maxOrder, orderResult + 1);
@@ -202,6 +222,12 @@ public class Ex2Sheet implements Sheet {
 
         return maxOrder;
     }
+
+    /**
+     * add to a list all the cells he depends on
+     * @param cell
+     * @return list that has all the cells he depends on
+     */
 
     private List<String> extractCells(Cell cell) {
         List<String> cells = new ArrayList<>();
@@ -211,7 +237,7 @@ public class Ex2Sheet implements Sheet {
         Matcher matcher = pattern.matcher(cell.getData());
 
         while (matcher.find()) {
-            if (!currentRoundVisited.contains(matcher.group())) {
+            if (!currentRoundVisited.contains(matcher.group())) {//if same cell in the same stage,don't add
                 currentRoundVisited.add(matcher.group());
                 cells.add(matcher.group());
             }
@@ -233,10 +259,9 @@ public class Ex2Sheet implements Sheet {
         String delimiter = ",";
         boolean isFirstLine = true;
 
-        // קריאה מהקובץ
+        // read from the file
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             while ((line = br.readLine()) != null) {
-                // דילוג על שורת הכותרת
                 if (isFirstLine) {
                     isFirstLine = false;
                     continue;
@@ -244,7 +269,7 @@ public class Ex2Sheet implements Sheet {
 
                 String[] values = line.split(delimiter);
 
-                // בדיקה אם השורה מכילה נתונים תקינים
+                // if the cell is
                 if (values.length >= 3) {
                     String x = values[0];
                     String y = values[1];
@@ -293,6 +318,13 @@ public class Ex2Sheet implements Sheet {
         return (changeCell(get(x, y).getData()));
     }
 
+    /**
+     *
+     * @param cell
+     * @return Returns the cell after it has been replaced by
+     * cells that depend on it for their data
+     */
+
     private String changeCell(String cell) {
         StringBuffer ans = new StringBuffer(cell);
 
@@ -306,16 +338,16 @@ public class Ex2Sheet implements Sheet {
             String match = matcher.group();
             int start = matcher.start();
             int end = matcher.end();
-            if (get(match).getType() == Ex2Utils.NUMBER)
+            if (get(match).getType() == Ex2Utils.NUMBER) //in parentheses to avoid mistakes
                 ans.replace(start, end, "(" + get(match).getData() + ")");
             if (get(match).getType() == Ex2Utils.FORM || get(match).getType() == Ex2Utils.ERR_FORM_FORMAT)
-                ans.replace(start, end, "(" + get(match).getData().substring(1) + ")");
+                ans.replace(start, end, "(" + get(match).getData().substring(1) + ")");//without the =
             if (get(match).getType() == Ex2Utils.TEXT || get(match).getData() == Ex2Utils.EMPTY_CELL)
                 ans.replace(start, end, "=@");
             if (get(match).getType() == Ex2Utils.ERR_CYCLE_FORM)
                 ans.replace(start, end, "(" + get(match).getData().substring(1) + ")");
         }
-        if (!found)
+        if (!found) //base case
             return ans.toString();
 
         return changeCell(ans.toString());

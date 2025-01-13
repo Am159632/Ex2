@@ -180,7 +180,7 @@ public class SCell implements Cell {
 
         form = form.replaceAll("\\s+", "");//delete spaces
         if (form.startsWith("=-")) {
-            String x = form.substring(2, form.length());
+            String x = form.substring(2, form.length());//exception handling
             return computeForm("=0-1*" + x);
         }
         if (form.startsWith("=+")) {
@@ -195,7 +195,7 @@ public class SCell implements Cell {
         if (isNumber(form)) //Stopping condition
             return Double.parseDouble(form);
 
-        if (form.startsWith("(") & form.endsWith(")")) {
+        if (form.startsWith("(") & form.endsWith(")")) {//if in parentheses and inside the formula is correct
             String x = "=" + form.substring(1, form.length() - 1);
             if(isForm(x))
                 return computeForm(x);
@@ -204,7 +204,7 @@ public class SCell implements Cell {
         String left = form.substring(0, indOfMainOp(form));
         String right = form.substring(indOfMainOp(form) + 1, form.length());
 
-        double Vl = computeForm("=" + left);
+        double Vl = computeForm("=" + left);//recoursion
         double Vr = computeForm("=" + right);
 
         char x = form.charAt(indOfMainOp(form));
