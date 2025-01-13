@@ -128,7 +128,7 @@ public class SCell implements Cell {
     }
 
     /**
-     * Checking the formula validity(if start with = ,if it has valid parentheses ,if  it has valid parentheses a wrong char)
+     * Checking the formula validity(if start with = ,if it has valid parentheses ,if  it hasn't a wrong char)
      * @param text
      * @return true if valid
      */

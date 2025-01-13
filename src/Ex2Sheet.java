@@ -246,12 +246,19 @@ public class Ex2Sheet implements Sheet {
         return cells;
     }
 
+    /**
+     * Loads spreadsheet data from a file
+     *
+     * @param fileName The path of the file to load
+     * @throws IOException If there is an error reading the file
+     */
+
     @Override
     public void load(String fileName) throws IOException {
-        // איפוס הטבלה הקיימת
+        // Initialize table with empty cells
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table[i].length; j++) {
-                table[i][j] = new SCell(""); // תא ריק
+                table[i][j] = new SCell("");
             }
         }
 
@@ -259,27 +266,28 @@ public class Ex2Sheet implements Sheet {
         String delimiter = ",";
         boolean isFirstLine = true;
 
-        // read from the file
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) { // Skip the header line
                 if (isFirstLine) {
                     isFirstLine = false;
                     continue;
                 }
 
+                // Split the line into components
                 String[] values = line.split(delimiter);
 
-                // if the cell is
+                // Ensure we have all required components (row, column, data)
                 if (values.length >= 3) {
                     String x = values[0];
                     String y = values[1];
                     String data = values[2];
 
+                    // Validate that row and column are numbers
                     if (isNumber(x) && isNumber(y)) {
                         int row = Integer.parseInt(x);
                         int col = Integer.parseInt(y);
 
-                        // עדכון הטבלה בנתונים מהקובץ
+                        // Create new cell with loaded data
                         table[row][col] = new SCell(data);
                     }
                 }
@@ -297,14 +305,22 @@ public class Ex2Sheet implements Sheet {
         }
     }
 
+    /**
+     * Saves the spreadsheet data to a file
+     *
+     * @param fileName The path where the file will be saved
+     * @throws IOException If there is an error writing to the file
+     */
+
     public void save(String fileName) throws IOException {
         try (FileWriter writer = new FileWriter(fileName)) {
-            writer.append("I2CS ArielU: SpreadSheet (Ex2) assignment -\n"); // כותרת הקובץ
+            writer.append("I2CS ArielU: SpreadSheet (Ex2) assignment -\n"); // header line
 
+            // Iterate through the table and save each cell's data
             for (int i = 0; i < table.length; i++) {
                 for (int j = 0; j < table[i].length; j++) {
                     String data = table[i][j].getData();
-                    // שומרים את כל התאים, כולל תאים ריקים
+                    // Save in format: row,column,data
                     writer.append(i + "," + j + "," + data + "\n");
                 }
             }
