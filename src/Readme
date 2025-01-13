@@ -19,8 +19,9 @@ The system allows users to input different values into cells, perform mathematic
      - Formulas (starting with `=`)
 
 2. **Key Functions:**
-   - `computeForm(String form)`: Evaluates a formula entered in a cell.
+
    - `isValidForm(String text)`: Checks whether the formula is valid in terms of format and parentheses.
+   - `computeForm(String form)`: Evaluates a formula entered in a cell.
    - `eval(int x, int y)`: Converts cell data into a format suitable for computation.
    - `value(int x, int y)`: Computes the value of a cell based on its data type.
    - `depth()`: Calculates the dependency depth of each cell to prevent circular dependencies.
@@ -32,7 +33,7 @@ The system allows users to input different values into cells, perform mathematic
 ## Explanation of Key Functions
 
 ### 1. **Formula Calculation - `computeForm`**
-This function takes a mathematical formula, removes whitespace, checks the format's validity, and computes the formula's result.
+This function takes a mathematical formula, checks the format's validity, and computes the formula's result.
 
 ### 2. **Formula Validation - `isValidForm`**
 This function ensures that a formula adheres to the syntax rules. It checks that:
@@ -48,11 +49,13 @@ This function calculates the actual value displayed to the user, depending on th
 - Returns the text as-is if it's a text cell.
 - Evaluates the formula using `computeForm` if it's a formula cell.
 - Returns the number as-is if it's a numeric cell.
+- Returns error if cycle or invalid form.
 
 ### 5. **Dependency Depth Calculation - `depth`**
 This function calculates the dependency depth of each cell in the table.
 - Returns a 2D matrix where each cell contains its corresponding dependency depth.
 - Prevents circular dependencies through recursive checks.
+- reurns 1+max cell that depens on or -1 if cycle.
 
 ### 6. **Loading Data - `load`**
 This function loads data from a CSV file and updates the table.

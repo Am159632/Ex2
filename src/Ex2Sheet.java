@@ -115,33 +115,7 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void eval() {
-//        int maxD =-1;
-//        int[][] dd = depth();
-//        for (int i = 0; i < dd.length; i++) {
-//            for (int j = 0; j < dd[0].length; j++) {
-//                if (maxD<dd[i][j])
-//                    maxD=dd[i][j];
-//            }
-//        }
-//        for (int d=-1;d<=maxD;maxD++) {
-//            for (int i = 0; i < dd.length; i++) {
-//                for (int j = 0; j < dd[0].length; j++) {
-//                    if (d==dd[i][j]){
-//                        table[i][j].setData(table[i][j].getData());
-//                        table[i][j].setOrder(dd[i][j]);
-//                        if (table[i][j].getType()== Ex2Utils.ERR_FORM_FORMAT || table[i][j].getType()== Ex2Utils.FORM){
-//
-//                                SCell newcell=new SCell(eval(i,j));
-//                                if (newcell.getType() == Ex2Utils.ERR_FORM_FORMAT)
-//                                    table[i][j].setType(Ex2Utils.ERR_FORM_FORMAT);
-//                                if (newcell.getType() == Ex2Utils.FORM) {
-//                                    table[i][j].setType(Ex2Utils.FORM);
-//                                }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+
     }
 
     @Override
