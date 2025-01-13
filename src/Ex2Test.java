@@ -35,13 +35,13 @@ public class Ex2Test {
         sheet.set(0,1,"=A0+1");
         Assertions.assertEquals(sheet.eval(0,1),"=(1+3*4-5)+1");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(0,1)),9.0);
-        sheet.set(0,1,"=1.2*(8-13)+1.5*(0.2*2-(A0-5))");
+        sheet.set(0,1,"=1.2*(8-13)+1.5*(0.2*2-(a0-5))");
         Assertions.assertEquals(sheet.eval(0, 1),"=1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5))");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(0, 1)),-9.9);
         sheet.set(1,0,"=(A1-0.1)*0.2");
         Assertions.assertEquals(sheet.eval(1, 0),"=((1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5)))-0.1)*0.2");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(1, 0)),-2);
-        sheet.set(1,1,"=B0*(A1-0.1)/4-A0");
+        sheet.set(1,1,"=b0*(A1-0.1)/4-A0");
         Assertions.assertEquals(sheet.eval(1, 1),"=(((1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5)))-0.1)*0.2)*((1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5)))-0.1)/4-(1+3*4-5)");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(1, 1)),-3);
     }
@@ -58,6 +58,8 @@ public class Ex2Test {
         assertEquals(sheet.value(1,1),"4.0");
         sheet.set(0,1,"=B1");
         assertEquals(sheet.value(0,1), Ex2Utils.ERR_CYCLE);
+        sheet.set(0,0,"=Aa1");
+        Assertions.assertEquals(sheet.value(0,0), Ex2Utils.ERR_FORM);
     }
 
     @Test
