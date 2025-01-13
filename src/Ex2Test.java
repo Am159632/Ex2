@@ -1,13 +1,13 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Ex2Test {
 
     private Ex2Sheet sheet;
+
     @BeforeEach
     void setUp() {
         sheet = new Ex2Sheet(2, 2);
