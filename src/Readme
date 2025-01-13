@@ -2,11 +2,8 @@
 
 ## Project Goal
 
-The objective of this project is to develop a system for managing and processing data in a table, similar to a spreadsheet application. The system allows users to input different values into cells, perform mathematical calculations based on formulas, and manage dependencies between cells.
-
-The project includes several key functions for data processing, validity checking, and automatic formula calculation.
-
----
+The objective of this project is to develop a system for managing and processing data in a table, similar to a spreadsheet application.
+The system allows users to input different values into cells, perform mathematical calculations based on formulas, and manage dependencies between cells.
 
 ## General Explanation of the Project Structure
 
@@ -75,18 +72,12 @@ This function saves the table's data to a CSV file.
 2. **`ERR_CYCLE_FORM`:**
    Circular dependency error (when a cell indirectly depends on itself).
 
-3. **`ERR_FORM`:**
-   General error in a formula that cannot be computed.
-
-4. **`EMPTY_CELL`:**
-   Empty cell without any data.
-
 ### Colors:
 The system uses colors for quick identification of cell types:
-- **Number cells:** Green
-- **Text cells:** Blue
-- **Formula cells:** Yellow
-- **Empty cells:** White
-- **Error cells:** Red
+- **Number cells:** Black
+- **Text cells:** Gray
+- **Formula cells:** Blue
+- **Error formula:** Red
+- **Error cycle:**Brown
 
 
