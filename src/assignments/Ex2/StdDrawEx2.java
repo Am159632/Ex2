@@ -1,10 +1,10 @@
-// https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html
+package assignments.Ex2;// https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html
 /** ArielU. Intro2CS, Ex2: https://docs.google.com/document/d/1-18T-dj00apE4k1qmpXGOaqttxLn-Kwi/edit?usp=sharing&ouid=113711744349547563645&rtpof=true&sd=true
  DO NOT CHANGE THIS INTERFACE!!
  */
 /******************************************************************************
- *  Compilation:  javac StdDrawEx2.java
- *  Execution:    java StdDrawEx2
+ *  Compilation:  javac assignments.Ex2.StdDrawEx2.java
+ *  Execution:    java assignments.Ex2.StdDrawEx2
  *  Dependencies: none
  *
  *
@@ -39,7 +39,7 @@ import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 /**
- *  The {@code StdDrawEx2} class provides a basic capability for
+ *  The {@code assignments.Ex2.StdDrawEx2} class provides a basic capability for
  *  creating drawings with your programs. It uses a simple graphics model that
  *  allows you to create drawings consisting of points, lines, squares,
  *  circles, and other geometric shapes in a window on your computer and
@@ -48,23 +48,23 @@ import java.util.TreeSet;
  *  user interaction via the keyboard and mouse.
  *  <p>
  *  <b>Getting started.</b>
- *  To use this class, you must have {@code StdDrawEx2.class} in your
+ *  To use this class, you must have {@code assignments.Ex2.StdDrawEx2.class} in your
  *  Java classpath. If you used our autoinstaller, you should be all set.
  *  Otherwise, either download
  *  <a href = "https://introcs.cs.princeton.edu/java/code/stdlib.jar">stdlib.jar</a>
  *  and add to your Java classpath or download
- *  <a href = "https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java">StdDrawEx2.java</a>
+ *  <a href = "https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java">assignments.Ex2.StdDrawEx2.java</a>
  *  and put a copy in your working directory.
  *  <p>
  *  Now, type the following short program into your editor:
  *  <pre>
  *   public class TestStdDraw {
  *       public static void main(String[] args) {
- *           StdDrawEx2.setPenRadius(0.05);
- *           StdDrawEx2.setPenColor(StdDrawEx2.BLUE);
- *           StdDrawEx2.point(0.5, 0.5);
- *           StdDrawEx2.setPenColor(StdDrawEx2.MAGENTA);
- *           StdDrawEx2.line(0.2, 0.2, 0.8, 0.2);
+ *           assignments.Ex2.StdDrawEx2.setPenRadius(0.05);
+ *           assignments.Ex2.StdDrawEx2.setPenColor(assignments.Ex2.StdDrawEx2.BLUE);
+ *           assignments.Ex2.StdDrawEx2.point(0.5, 0.5);
+ *           assignments.Ex2.StdDrawEx2.setPenColor(assignments.Ex2.StdDrawEx2.MAGENTA);
+ *           assignments.Ex2.StdDrawEx2.line(0.2, 0.2, 0.8, 0.2);
  *       }
  *   }
  *  </pre>
@@ -73,9 +73,9 @@ import java.util.TreeSet;
  *  This program illustrates the two main types of methods in standard
  *  drawing—methods that draw geometric shapes and methods that
  *  control drawing parameters.
- *  The methods {@code StdDrawEx2.line()} and {@code StdDrawEx2.point()}
- *  draw lines and points; the methods {@code StdDrawEx2.setPenRadius()}
- *  and {@code StdDrawEx2.setPenColor()} control the line thickness and color.
+ *  The methods {@code assignments.Ex2.StdDrawEx2.line()} and {@code assignments.Ex2.StdDrawEx2.point()}
+ *  draw lines and points; the methods {@code assignments.Ex2.StdDrawEx2.setPenRadius()}
+ *  and {@code assignments.Ex2.StdDrawEx2.setPenColor()} control the line thickness and color.
  *  <p>
  *  <b>Points and lines.</b>
  *  You can draw points and line segments with the following methods:
@@ -124,7 +124,7 @@ import java.util.TreeSet;
  *  The arc is from the circle centered at (<em>x</em>, <em>y</em>) of the specified radius.
  *  The arc extends from angle1 to angle2. By convention, the angles are
  *  <em>polar</em> (counterclockwise angle from the <em>x</em>-axis)
- *  and represented in degrees. For example, {@code StdDrawEx2.arc(0.0, 0.0, 1.0, 0, 90)}
+ *  and represented in degrees. For example, {@code assignments.Ex2.StdDrawEx2.arc(0.0, 0.0, 1.0, 0, 90)}
  *  draws the arc of the unit circle from 3 o'clock (0 degrees) to 12 o'clock (90 degrees).
  *  <p>
  *  <b>Polygons.</b>
@@ -140,7 +140,7 @@ import java.util.TreeSet;
  *  <pre>
  *   double[] x = { 0.1, 0.2, 0.3, 0.2 };
  *   double[] y = { 0.2, 0.3, 0.2, 0.1 };
- *   StdDrawEx2.filledPolygon(x, y);
+ *   assignments.Ex2.StdDrawEx2.filledPolygon(x, y);
  *  </pre>
  *  <p>
  *  <b>Pen size.</b>
@@ -156,7 +156,7 @@ import java.util.TreeSet;
  *  <li> {@link #setPenRadius(double radius)}
  *  </ul>
  *  <p>
- *  For example, {@code StdDrawEx2.setPenRadius(0.025)} makes
+ *  For example, {@code assignments.Ex2.StdDrawEx2.setPenRadius(0.025)} makes
  *  the thickness of the lines and the size of the points to be five times
  *  the 0.005 default.
  *  To draw points with the minimum possible radius (one pixel on typical
@@ -182,7 +182,7 @@ import java.util.TreeSet;
  *  {@link #PINK}, {@link #RED}, {@link #WHITE}, {@link #YELLOW},
  *  {@link #BOOK_BLUE}, {@link #BOOK_LIGHT_BLUE}, {@link #BOOK_RED}, and
  *  {@link #PRINCETON_ORANGE}.
- *  For example, {@code StdDrawEx2.setPenColor(StdDrawEx2.MAGENTA)} sets the
+ *  For example, {@code assignments.Ex2.StdDrawEx2.setPenColor(assignments.Ex2.StdDrawEx2.MAGENTA)} sets the
  *  pen color to magenta.
  *  <p>
  *  <b>Canvas size.</b>
@@ -197,7 +197,7 @@ import java.util.TreeSet;
  *  It also erases the current drawing and resets the coordinate system,
  *  pen radius, pen color, and font back to their default values.
  *  Ordinarly, this method is called once, at the very beginning of a program.
- *  For example, {@code StdDrawEx2.setCanvasSize(800, 800)}
+ *  For example, {@code assignments.Ex2.StdDrawEx2.setCanvasSize(800, 800)}
  *  sets the canvas size to be 800-by-800 pixels.
  *  <p>
  *  <b>Canvas scale and coordinate system.</b>
@@ -213,7 +213,7 @@ import java.util.TreeSet;
  *  The arguments are the coordinates of the minimum and maximum
  *  <em>x</em>- or <em>y</em>-coordinates that will appear in the canvas.
  *  For example, if you  wish to use the default coordinate system but
- *  leave a small margin, you can call {@code StdDrawEx2.setScale(-.05, 1.05)}.
+ *  leave a small margin, you can call {@code assignments.Ex2.StdDrawEx2.setScale(-.05, 1.05)}.
  *  <p>
  *  These methods change the coordinate system for subsequent drawing
  *  commands; they do not affect previous drawings.
@@ -246,8 +246,8 @@ import java.util.TreeSet;
  *  code fragment sets the font to Arial Bold, 60 point.
  *  <pre>
  *   Font font = new Font("Arial", Font.BOLD, 60);
- *   StdDrawEx2.setFont(font);
- *   StdDrawEx2.text(0.5, 0.5, "Hello, World");
+ *   assignments.Ex2.StdDrawEx2.setFont(font);
+ *   assignments.Ex2.StdDrawEx2.text(0.5, 0.5, "Hello, World");
  *  </pre>
  *  <p>
  *  <b>Images.</b>
@@ -286,7 +286,7 @@ import java.util.TreeSet;
  *  <p>
  *  The first method clears the canvas to white; the second method
  *  allows you to specify a color of your choice. For example,
- *  {@code StdDrawEx2.clear(StdDrawEx2.LIGHT_GRAY)} clears the canvas to a shade
+ *  {@code assignments.Ex2.StdDrawEx2.clear(assignments.Ex2.StdDrawEx2.LIGHT_GRAY)} clears the canvas to a shade
  *  of gray.
  *  <p>
  *  <b>Computer animations and double buffering.</b>
@@ -330,17 +330,17 @@ import java.util.TreeSet;
  *  <p>
  *  For example, this code fragment animates two balls moving in a circle.
  *  <pre>
- *   StdDrawEx2.setScale(-2, +2);
- *   StdDrawEx2.enableDoubleBuffering();
+ *   assignments.Ex2.StdDrawEx2.setScale(-2, +2);
+ *   assignments.Ex2.StdDrawEx2.enableDoubleBuffering();
  *
  *   for (double t = 0.0; true; t += 0.02) {
  *       double x = Math.sin(t);
  *       double y = Math.cos(t);
- *       StdDrawEx2.clear();
- *       StdDrawEx2.filledCircle(x, y, 0.05);
- *       StdDrawEx2.filledCircle(-x, -y, 0.05);
- *       StdDrawEx2.show();
- *       StdDrawEx2.pause(20);
+ *       assignments.Ex2.StdDrawEx2.clear();
+ *       assignments.Ex2.StdDrawEx2.filledCircle(x, y, 0.05);
+ *       assignments.Ex2.StdDrawEx2.filledCircle(-x, -y, 0.05);
+ *       assignments.Ex2.StdDrawEx2.show();
+ *       assignments.Ex2.StdDrawEx2.pause(20);
  *   }
  *  </pre>
  *  <p>
@@ -864,11 +864,11 @@ public final class StdDrawEx2 implements ActionListener, MouseListener, MouseMot
      * Sets the pen color to the specified color.
      * <p>
      * The predefined pen colors are
-     * {@code StdDrawEx2.BLACK}, {@code StdDrawEx2.BLUE}, {@code StdDrawEx2.CYAN},
-     * {@code StdDrawEx2.DARK_GRAY}, {@code StdDrawEx2.GRAY}, {@code StdDrawEx2.GREEN},
-     * {@code StdDrawEx2.LIGHT_GRAY}, {@code StdDrawEx2.MAGENTA}, {@code StdDrawEx2.ORANGE},
-     * {@code StdDrawEx2.PINK}, {@code StdDrawEx2.RED}, {@code StdDrawEx2.WHITE}, and
-     * {@code StdDrawEx2.YELLOW}.
+     * {@code assignments.Ex2.StdDrawEx2.BLACK}, {@code assignments.Ex2.StdDrawEx2.BLUE}, {@code assignments.Ex2.StdDrawEx2.CYAN},
+     * {@code assignments.Ex2.StdDrawEx2.DARK_GRAY}, {@code assignments.Ex2.StdDrawEx2.GRAY}, {@code assignments.Ex2.StdDrawEx2.GREEN},
+     * {@code assignments.Ex2.StdDrawEx2.LIGHT_GRAY}, {@code assignments.Ex2.StdDrawEx2.MAGENTA}, {@code assignments.Ex2.StdDrawEx2.ORANGE},
+     * {@code assignments.Ex2.StdDrawEx2.PINK}, {@code assignments.Ex2.StdDrawEx2.RED}, {@code assignments.Ex2.StdDrawEx2.WHITE}, and
+     * {@code assignments.Ex2.StdDrawEx2.YELLOW}.
      *
      * @param color the color to make the pen
      */
@@ -1246,7 +1246,7 @@ public final class StdDrawEx2 implements ActionListener, MouseListener, MouseMot
             }
         }
 
-        // in case file is inside a .jar (classpath relative to StdDrawEx2)
+        // in case file is inside a .jar (classpath relative to assignments.Ex2.StdDrawEx2)
         if ((icon == null) || (icon.getImageLoadStatus() != MediaTracker.COMPLETE)) {
             URL url = StdDrawEx2.class.getResource(filename);
             if (url != null)
@@ -1284,9 +1284,9 @@ public final class StdDrawEx2 implements ActionListener, MouseListener, MouseMot
             // ignore
         }
 
-        // in case file is inside a .jar (classpath relative to StdDrawEx2)
+        // in case file is inside a .jar (classpath relative to assignments.Ex2.StdDrawEx2)
         try {
-            URL url = StdDrawEx2.class.getResource(filename);
+            URL url = assignments.Ex2.StdDrawEx2.class.getResource(filename);
             BufferedImage image = ImageIO.read(url);
             return image;
         }
@@ -1296,7 +1296,7 @@ public final class StdDrawEx2 implements ActionListener, MouseListener, MouseMot
 
         // in case file is inside a .jar (classpath relative to root of jar)
         try {
-            URL url = StdDrawEx2.class.getResource("/" + filename);
+            URL url = assignments.Ex2.StdDrawEx2.class.getResource("/" + filename);
             BufferedImage image = ImageIO.read(url);
             return image;
         }
@@ -1474,7 +1474,7 @@ public final class StdDrawEx2 implements ActionListener, MouseListener, MouseMot
     }
     ////////////// Ex2 123456////////////////////
     public static String getCell(Index2D cord, String input) {
-        var ans = JOptionPane.showInputDialog("Cell: "+cord+"= "+input,input);
+        var ans = JOptionPane.showInputDialog("assignments.Ex2.Cell: "+cord+"= "+input,input);
         var output = ans + " FORM!";
         return ans;
     }
@@ -1693,11 +1693,11 @@ public final class StdDrawEx2 implements ActionListener, MouseListener, MouseMot
         //JTextField j= new JTextField(""+ix+","+iy+")",16);
         //j.setText("Enter");
         //j.setVisible(true);
-	/*	FileDialog chooser = new FileDialog(StdDrawEx2.frame, "Enter text to ("+ix+","+iy+")", FileDialog.SAVE);
+	/*	FileDialog chooser = new FileDialog(assignments.Ex2.StdDrawEx2.frame, "Enter text to ("+ix+","+iy+")", FileDialog.SAVE);
 		chooser.setVisible(true);
 		String filename = chooser.getFile();
 		if (filename != null) {
-			StdDrawEx2.save(chooser.getDirectory() + File.separator + chooser.getFile());
+			assignments.Ex2.StdDrawEx2.save(chooser.getDirectory() + File.separator + chooser.getFile());
 		}*/
     }
 

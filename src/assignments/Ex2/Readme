@@ -37,10 +37,10 @@ This function ensures that a formula adheres to the syntax rules. It checks that
 - There are no mismatched parentheses.
 - The formula contains only valid characters (digits, mathematical operators, etc.).
 
-### 3. **Cell Data Conversion - `eval`**
+### 3. **assignments.Ex2.Cell Data Conversion - `eval`**
 This function replaces references to other cells (e.g., `A1`) with their respective values, enabling proper formula computation.
 
-### 4. **Cell Value Computation - `value`**
+### 4. **assignments.Ex2.Cell Value Computation - `value`**
 This function calculates the actual value displayed to the user, depending on the cell's data type:
 - Returns the text as-is if it's a text cell.
 - Evaluates the formula using `computeForm` if it's a formula cell.
@@ -70,7 +70,7 @@ This function saves the table's data to a CSV file.
    Error in the formula's format (e.g., missing parentheses).
 
 2. **`ERR_CYCLE_FORM`:**
-   Circular dependency error (when a cell indirectly depends on itself).
+   Circular dependency error (when a cell directly/indirectly depends on itself).
 
 ### Colors:
 The system uses colors for quick identification of cell types:

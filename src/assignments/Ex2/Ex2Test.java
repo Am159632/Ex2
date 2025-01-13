@@ -1,3 +1,6 @@
+package assignments.Ex2;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,17 +12,17 @@ public class Ex2Test {
 
     @Test
     void computeFormTest(){
-        double a=SCell.computeForm("=8.7");
+        double a= SCell.computeForm("=8.7");
         assertEquals(a,8.7);
-        a=SCell.computeForm("= 1 + 2 ");
+        a= SCell.computeForm("= 1 + 2 ");
         assertEquals(a,3.0);
-        a=SCell.computeForm("=((1+3)*((3-1.5))+3)");
+        a= SCell.computeForm("=((1+3)*((3-1.5))+3)");
         assertEquals(a,9);
-        a=SCell.computeForm("=4+4+(4*4/(4*4/(4+4)-(4*4)/4-(4*4)+4*4)/4-4)");
+        a= SCell.computeForm("=4+4+(4*4/(4*4/(4+4)-(4*4)/4-(4*4)+4*4)/4-4)");
         assertEquals(a,2);
-        a=SCell.computeForm("=(4-2)*3-5/(2*3.5-10+1.5*2)");
+        a= SCell.computeForm("=(4-2)*3-5/(2*3.5-10+1.5*2)");
         assertTrue(Double.isInfinite(a));
-        a=SCell.computeForm("=6-(-6)");
+        a= SCell.computeForm("=6-(-6)");
         assertEquals(a,12);
     }
 
@@ -27,13 +30,13 @@ public class Ex2Test {
     void eval(){
         sheet.set(0,0,"=1+3*4-5");
         sheet.set(0,1,"=A0+1");
-        assertEquals(SCell.computeForm(sheet.eval(0,1)),9.0);
+        Assertions.assertEquals(SCell.computeForm(sheet.eval(0,1)),9.0);
         sheet.set(0,1,"=1.2*(8-13)+1.5*(0.2*2-(A0-5))");
-        assertEquals(SCell.computeForm(sheet.eval(0, 1)),-9.9);
+        Assertions.assertEquals(SCell.computeForm(sheet.eval(0, 1)),-9.9);
         sheet.set(1,0,"=(A1-0.1)*0.2");
-        assertEquals(SCell.computeForm(sheet.eval(1, 0)),-2);
+        Assertions.assertEquals(SCell.computeForm(sheet.eval(1, 0)),-2);
         sheet.set(1,1,"=B0*(A1-0.1)/4-A0");
-        assertEquals(SCell.computeForm(sheet.eval(1, 1)),-3);
+        Assertions.assertEquals(SCell.computeForm(sheet.eval(1, 1)),-3);
     }
 
     @Test
@@ -43,11 +46,11 @@ public class Ex2Test {
         sheet.set(0,1,"8");
         assertEquals(sheet.value(0,1),"8");
         sheet.set(1,0,"=A0");
-        assertEquals(sheet.value(1,0),Ex2Utils.ERR_FORM);
+        Assertions.assertEquals(sheet.value(1,0), Ex2Utils.ERR_FORM);
         sheet.set(1,1,"=A1-4");
         assertEquals(sheet.value(1,1),"4.0");
         sheet.set(0,1,"=B1");
-        assertEquals(sheet.value(0,1),Ex2Utils.ERR_CYCLE);
+        Assertions.assertEquals(sheet.value(0,1), Ex2Utils.ERR_CYCLE);
     }
 
     @Test

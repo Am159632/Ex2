@@ -1,3 +1,5 @@
+package assignments.Ex2;
+
 import java.io.IOException;
 
 /**
@@ -43,7 +45,7 @@ public interface Sheet {
     public void set(int x, int y, String c);
 
     /**
-     * Return the Cell in the x,y, position (or null if not in).
+     * Return the assignments.Ex2.Cell in the x,y, position (or null if not in).
      * @param x integer, x-coordinate of the cell.
      * @param y integer, y-coordinate of the cell.
      * @return the cell in the x,y coordinate.
@@ -89,7 +91,7 @@ public interface Sheet {
      * Saves this SpreadSheet into a text file.
      * Only none empty cells should be saved.
      * You can assume that the width and the height of the loaded SpreadSheet are as defined in
-     * Ex2Utils WIDTH & HEIGHT.
+     * assignments.Ex2.Ex2Utils WIDTH & HEIGHT.
      * The text file has the following format:
      * "First line: just a header line - should not be parsed.
      * "Line 1: <x>,<y>, The cell String, remarks (not to be parsed).
