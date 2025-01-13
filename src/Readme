@@ -1,1 +1,92 @@
+# README - Project: Spreadsheet Calculation Manager
+
+## Project Goal
+
+The objective of this project is to develop a system for managing and processing data in a table, similar to a spreadsheet application. The system allows users to input different values into cells, perform mathematical calculations based on formulas, and manage dependencies between cells.
+
+The project includes several key functions for data processing, validity checking, and automatic formula calculation.
+
+---
+
+## General Explanation of the Project Structure
+
+### System Components
+
+1. **Cells:**
+   - Each cell can contain different types of values:
+     - Numbers
+     - Text
+     - Formulas (starting with `=`)
+
+2. **Key Functions:**
+   - `computeForm(String form)`: Evaluates a formula entered in a cell.
+   - `isValidForm(String text)`: Checks whether the formula is valid in terms of format and parentheses.
+   - `eval(int x, int y)`: Converts cell data into a format suitable for computation.
+   - `value(int x, int y)`: Computes the value of a cell based on its data type.
+   - `depth()`: Calculates the dependency depth of each cell to prevent circular dependencies.
+   - `load(String fileName)`: Loads data from a file and populates the table.
+   - `save(String fileName)`: Saves the table's data to a file.
+
+---
+
+## Explanation of Key Functions
+
+### 1. **Formula Calculation - `computeForm`**
+This function takes a mathematical formula, removes whitespace, checks the format's validity, and computes the formula's result.
+
+### 2. **Formula Validation - `isValidForm`**
+This function ensures that a formula adheres to the syntax rules. It checks that:
+- The formula starts with `=`.
+- There are no mismatched parentheses.
+- The formula contains only valid characters (digits, mathematical operators, etc.).
+
+### 3. **Cell Data Conversion - `eval`**
+This function replaces references to other cells (e.g., `A1`) with their respective values, enabling proper formula computation.
+
+### 4. **Cell Value Computation - `value`**
+This function calculates the actual value displayed to the user, depending on the cell's data type:
+- Returns the text as-is if it's a text cell.
+- Evaluates the formula using `computeForm` if it's a formula cell.
+- Returns the number as-is if it's a numeric cell.
+
+### 5. **Dependency Depth Calculation - `depth`**
+This function calculates the dependency depth of each cell in the table.
+- Returns a 2D matrix where each cell contains its corresponding dependency depth.
+- Prevents circular dependencies through recursive checks.
+
+### 6. **Loading Data - `load`**
+This function loads data from a CSV file and updates the table.
+- Resets the table before loading.
+- Reads cell values from the file and populates the table accordingly.
+
+### 7. **Saving Data - `save`**
+This function saves the table's data to a CSV file.
+- Writes all cells, including empty ones, to the file.
+- Adds a header for documentation purposes.
+
+---
+
+## Errors and Colors
+
+### Types of Errors in the System:
+1. **`ERR_FORM_FORMAT`:**
+   Error in the formula's format (e.g., missing parentheses).
+
+2. **`ERR_CYCLE_FORM`:**
+   Circular dependency error (when a cell indirectly depends on itself).
+
+3. **`ERR_FORM`:**
+   General error in a formula that cannot be computed.
+
+4. **`EMPTY_CELL`:**
+   Empty cell without any data.
+
+### Colors:
+The system uses colors for quick identification of cell types:
+- **Number cells:** Green
+- **Text cells:** Blue
+- **Formula cells:** Yellow
+- **Empty cells:** White
+- **Error cells:** Red
+
 
