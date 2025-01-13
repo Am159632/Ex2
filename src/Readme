@@ -79,7 +79,7 @@ This function saves the table's data to a CSV file.
    Circular dependency error (when a cell directly/indirectly depends on itself).
 
 ### Colors:
-The system uses colors for quick identification of cell types:
+The system uses colors for each cell type:
 - **Number cells:** Black
 - **Text cells:** Gray
 - **Formula cells:** Blue
