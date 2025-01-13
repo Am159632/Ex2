@@ -1,5 +1,3 @@
-package assignments.Ex2;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -131,13 +129,13 @@ public class Ex2Sheet implements Sheet {
 //                    if (d==dd[i][j]){
 //                        table[i][j].setData(table[i][j].getData());
 //                        table[i][j].setOrder(dd[i][j]);
-//                        if (table[i][j].getType()== assignments.Ex2.Ex2Utils.ERR_FORM_FORMAT || table[i][j].getType()== assignments.Ex2.Ex2Utils.FORM){
+//                        if (table[i][j].getType()== Ex2Utils.ERR_FORM_FORMAT || table[i][j].getType()== Ex2Utils.FORM){
 //
-//                                assignments.Ex2.SCell newcell=new assignments.Ex2.SCell(eval(i,j));
-//                                if (newcell.getType() == assignments.Ex2.Ex2Utils.ERR_FORM_FORMAT)
-//                                    table[i][j].setType(assignments.Ex2.Ex2Utils.ERR_FORM_FORMAT);
-//                                if (newcell.getType() == assignments.Ex2.Ex2Utils.FORM) {
-//                                    table[i][j].setType(assignments.Ex2.Ex2Utils.FORM);
+//                                SCell newcell=new SCell(eval(i,j));
+//                                if (newcell.getType() == Ex2Utils.ERR_FORM_FORMAT)
+//                                    table[i][j].setType(Ex2Utils.ERR_FORM_FORMAT);
+//                                if (newcell.getType() == Ex2Utils.FORM) {
+//                                    table[i][j].setType(Ex2Utils.FORM);
 //                                }
 //                        }
 //                    }

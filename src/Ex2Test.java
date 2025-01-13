@@ -1,5 +1,3 @@
-package assignments.Ex2;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,12 +28,16 @@ public class Ex2Test {
     void eval(){
         sheet.set(0,0,"=1+3*4-5");
         sheet.set(0,1,"=A0+1");
+        Assertions.assertEquals(sheet.eval(0,1),"=(1+3*4-5)+1");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(0,1)),9.0);
         sheet.set(0,1,"=1.2*(8-13)+1.5*(0.2*2-(A0-5))");
+        Assertions.assertEquals(sheet.eval(0, 1),"=1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5))");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(0, 1)),-9.9);
         sheet.set(1,0,"=(A1-0.1)*0.2");
+        Assertions.assertEquals(sheet.eval(1, 0),"=((1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5)))-0.1)*0.2");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(1, 0)),-2);
         sheet.set(1,1,"=B0*(A1-0.1)/4-A0");
+        Assertions.assertEquals(sheet.eval(1, 1),"=(((1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5)))-0.1)*0.2)*((1.2*(8-13)+1.5*(0.2*2-((1+3*4-5)-5)))-0.1)/4-(1+3*4-5)");
         Assertions.assertEquals(SCell.computeForm(sheet.eval(1, 1)),-3);
     }
 
@@ -50,7 +52,7 @@ public class Ex2Test {
         sheet.set(1,1,"=A1-4");
         assertEquals(sheet.value(1,1),"4.0");
         sheet.set(0,1,"=B1");
-        Assertions.assertEquals(sheet.value(0,1), Ex2Utils.ERR_CYCLE);
+        assertEquals(sheet.value(0,1), Ex2Utils.ERR_CYCLE);
     }
 
     @Test

@@ -1,3 +1,6 @@
+ID:207302456
+https://github.com/Am159632/Ex2.git
+
 # README - Project: Spreadsheet Calculation Manager
 
 ## Project Goal
@@ -37,10 +40,10 @@ This function ensures that a formula adheres to the syntax rules. It checks that
 - There are no mismatched parentheses.
 - The formula contains only valid characters (digits, mathematical operators, etc.).
 
-### 3. **assignments.Ex2.Cell Data Conversion - `eval`**
+### 3. **Cell Data Conversion - `eval`**
 This function replaces references to other cells (e.g., `A1`) with their respective values, enabling proper formula computation.
 
-### 4. **assignments.Ex2.Cell Value Computation - `value`**
+### 4. **Cell Value Computation - `value`**
 This function calculates the actual value displayed to the user, depending on the cell's data type:
 - Returns the text as-is if it's a text cell.
 - Evaluates the formula using `computeForm` if it's a formula cell.
@@ -79,5 +82,7 @@ The system uses colors for quick identification of cell types:
 - **Formula cells:** Blue
 - **Error formula:** Red
 - **Error cycle:**Brown
+
+
 
 

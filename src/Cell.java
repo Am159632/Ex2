@@ -1,10 +1,8 @@
-package assignments.Ex2;
-
 /**
  * ArielU. Intro2CS, Ex2: https://docs.google.com/document/d/1-18T-dj00apE4k1qmpXGOaqttxLn-Kwi/edit?usp=sharing&ouid=113711744349547563645&rtpof=true&sd=true
  * DO NOT CHANGE THIS INTERFACE!!
  * This interface represents a spreadsheet entry for Ex2:
- * Each spreadsheet entry (aka a assignments.Ex2.Cell) which can be:
+ * Each spreadsheet entry (aka a Cell) which can be:
  * a number (Double), a String (Text), or a form, the data of each cell is represented as a String (e.g., "abc", "4.2", "=2+3*2", "=A1*(3-A2)".
  */
 public interface Cell {
@@ -21,13 +19,13 @@ public interface Cell {
 
     /**
      * Returns the type of this cell {TEXT,NUMBER, FORM, ERR_CYCLE_FORM, ERR_WRONG_FORM}
-     * @return an int value (as defined in assignments.Ex2.Ex2Utils)
+     * @return an int value (as defined in Ex2Utils)
      */
     public int getType();
 
     /**
-     * Changes the type of this assignments.Ex2.Cell {TEXT,NUMBER, FORM, ERR_CYCLE_FORM, ERR_WRONG_FORM}
-     * @param t an int type value as defines in assignments.Ex2.Ex2Utils.
+     * Changes the type of this Cell {TEXT,NUMBER, FORM, ERR_CYCLE_FORM, ERR_WRONG_FORM}
+     * @param t an int type value as defines in Ex2Utils.
      */
     public void setType(int t);
     /**
@@ -36,7 +34,7 @@ public interface Cell {
      */
     public int getOrder();
     /**
-     * Changes the order of this assignments.Ex2.Cell
+     * Changes the order of this Cell
      * @param t
      */
     public void setOrder(int t);

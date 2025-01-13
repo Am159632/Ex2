@@ -1,5 +1,3 @@
-package assignments.Ex2;
-
 public class CellEntry  implements Index2D {
     private int x;
     private int y;

@@ -1,5 +1,3 @@
-package assignments.Ex2;
-
 public class SCell implements Cell {
 
     private String line;
@@ -25,7 +23,7 @@ public class SCell implements Cell {
         this.line = s;
         this.order=0;
         if (SCell.isText(s))
-            this.type=Ex2Utils.TEXT;
+            this.type= Ex2Utils.TEXT;
         if (SCell.isNumber(s))
             this.type= Ex2Utils.NUMBER;
         if(SCell.isForm(s))
