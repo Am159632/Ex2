@@ -70,7 +70,7 @@ public class SCell implements Cell {
     }
 
     /**
-     * +|- = 1, *|/ =2
+     * +|- = 1, *|/ =2 , power=3
      * @param c
      * @return value of the operator
      */
@@ -81,7 +81,9 @@ public class SCell implements Cell {
             return 1;
         if (c == '*' | c == '/')
             return 2;
-        return 3;
+        if(c=='^')
+            return 3;
+        return 4;
     }
 
     /**
@@ -99,6 +101,8 @@ public class SCell implements Cell {
             return l + r;
         if (op == '-')
             return l - r;
+        if (op=='^')
+            return Math.pow(l,r);
         return l / r;
     }
 
@@ -110,7 +114,7 @@ public class SCell implements Cell {
      */
 
     public static int indOfMainOp(String text) {
-        int count = 0, index = -1, lowOP = 3;
+        int count = 0, index = -1, lowOP = 4;
         for (int i = 0; i < text.length(); i++) {
             char x = text.charAt(i);
             if (x == '(')
@@ -152,7 +156,7 @@ public class SCell implements Cell {
             return false;
         for (int i = 0; i < text.length(); i++) {
             char x = text.charAt(i);
-            if (x != '*' && x != '/' && x != '+' && x != '-' && x != '(' && x != ')' && x != '.' && !Character.isDigit(x))
+            if (x!='^' && x != '*' && x != '/' && x != '+' && x != '-' && x != '(' && x != ')' && x != '.' && !Character.isDigit(x))
                     return false;
 
         }

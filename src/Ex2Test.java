@@ -27,6 +27,8 @@ public class Ex2Test {
         assertTrue(Double.isInfinite(a));
         a= SCell.computeForm("=6-(-6)");
         assertEquals(a,12);
+        a=SCell.computeForm("=(1-2)^3+5^2/4");
+        assertEquals(a,5.25);
     }
 
     @Test
@@ -60,6 +62,13 @@ public class Ex2Test {
         assertEquals(sheet.value(0,1), Ex2Utils.ERR_CYCLE);
         sheet.set(0,0,"=Aa1");
         Assertions.assertEquals(sheet.value(0,0), Ex2Utils.ERR_FORM);
+        sheet.set(0,1,"=2-4*3+15/3-(-7)");
+        sheet.set(0,0,"=A1^2");
+        sheet.set(1,1,"=A1^a0/1.6");
+        Assertions.assertEquals(sheet.value(1,1),"10.0");
+        sheet.set(0,0,"=1+3*4-9^(2-1.5)");
+        sheet.set(0,1,"=A0^(2-1.5*2)");
+        Assertions.assertEquals(sheet.value(0,1),"0.1");
     }
 
     @Test

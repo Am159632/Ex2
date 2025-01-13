@@ -39,7 +39,7 @@ This function ensures that a formula adheres to the syntax rules. It checks that
 - The formula contains only valid characters (digits, mathematical operators, etc.).
 
 ### 2. **Formula Calculation - `computeForm`**
-This function takes a mathematical formula, checks the format's validity, and computes the formula's result.
+This function takes a mathematical formula, checks the format's validity, and computes the formula's result(include power).
 
 ### 3. **Cell Data Conversion - `eval`**
 This function replaces references to other cells (e.g., `A1`) with their respective values, enabling proper formula computation.
