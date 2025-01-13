@@ -52,7 +52,7 @@ public class Ex2Sheet implements Sheet {
         String ans = Ex2Utils.EMPTY_CELL;
 
         Cell c = get(x, y);
-        c.setData(c.getData());
+        c.setData(c.getData());//uptading data(including type) ans order
         c.setOrder(depth()[x][y]);
 
         if (c != null)
